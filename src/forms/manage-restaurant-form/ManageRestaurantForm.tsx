@@ -43,7 +43,7 @@ type RestaurantFormData = z.infer<typeof formSchema>;
 type Props = {
   onSave: (restaurantFormData: FormData) => void;
   isLoading: boolean;
-};
+ };
 
 const ManageRestaurantForm = ({ onSave, isLoading }: Props) => {
   const form = useForm<RestaurantFormData>({
@@ -109,4 +109,3 @@ const ManageRestaurantForm = ({ onSave, isLoading }: Props) => {
 export default ManageRestaurantForm;
 
 
-//7:33
