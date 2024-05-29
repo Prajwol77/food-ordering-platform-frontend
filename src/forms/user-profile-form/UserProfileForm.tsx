@@ -13,15 +13,19 @@ import {
 import { Input } from "@/components/ui/input.tsx";
 import LoadingButton from "@/components/LoadingButton.tsx";
 import { Button } from "@/components/ui/button";
-import {User} from "@/types.ts";
-import {useEffect} from "react";
+import { User } from "@/types.ts";
+import { useEffect } from "react";
 
 const formSchema = z.object({
-    email: z.string().optional(),
-    name: z.string().min(1, "name is required"),
-    address: z.string().min(1, "address is required"),
-    city: z.string().min(1, "city is required"),
-    contact: z.string().min(10, "Enter a ten-digit number").max(10, "Contact number must be 10 digits")
+  email: z.string().optional(),
+  name: z.string().min(1, "name is required"),
+  address: z.string().min(1, "address is required"),
+  city: z.string().min(1, "city is required"),
+  contact: z
+    .string()
+    .regex(/^[0-9]+$/, 'Contact number must be only digits')
+    .min(10, "Enter a ten-digit number")
+    .max(10, "Contact number must be 10 digits"),
 });
 
 type UserFormData = z.infer<typeof formSchema>;
@@ -32,15 +36,15 @@ type Props = {
   isLoading: boolean;
 };
 
-const UserProfileForm = ({ onSave, isLoading, currentUser}: Props) => {
+const UserProfileForm = ({ onSave, isLoading, currentUser }: Props) => {
   const form = useForm<UserFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: currentUser,
   });
 
-  useEffect(()=>{
-      form.reset(currentUser);
-  }, [currentUser, form])
+  useEffect(() => {
+    form.reset(currentUser);
+  }, [currentUser, form]);
 
   return (
     <Form {...form}>
@@ -117,14 +121,22 @@ const UserProfileForm = ({ onSave, isLoading, currentUser}: Props) => {
             render={({ field }) => (
               <FormItem className="flex-1">
                 <FormLabel>Contact Number</FormLabel>
-                <FormControl>
-                  <Input {...field} className="bg-white" defaultValue="+977" />
-                </FormControl>
+                <div className="flex">
+                  <span className="border px-3 flex items-center mr-2">
+                    +977
+                  </span>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      className="bg-white flex-1 border-l-0"
+                      placeholder="Enter contact number"
+                    />
+                  </FormControl>
+                </div>
                 <FormMessage />
               </FormItem>
             )}
           />
-
         </div>
         {isLoading ? (
           <LoadingButton />
