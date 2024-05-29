@@ -4,6 +4,7 @@ import HomePage from "@/pages/HomePage.tsx";
 import AuthCallbackPage from "@/pages/AuthCallbackPage.tsx";
 import UserProfilePage from "@/pages/UserProfilePage.tsx";
 import ProtectedRoute from "@/auth/ProtectedRoute.tsx";
+import ManageRestaurantPage from "@/pages/ManageRestaurantPage.tsx";
 
 const AppRoutes = () => {
   return (
@@ -24,6 +25,15 @@ const AppRoutes = () => {
           element={
             <Layout>
               <UserProfilePage />
+            </Layout>
+          }
+        />
+
+        <Route
+          path="/manage-restaurant"
+          element={
+            <Layout>
+              <ManageRestaurantPage />
             </Layout>
           }
         />

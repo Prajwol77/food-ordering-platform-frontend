@@ -20,7 +20,11 @@ const UsernameMenu = () => {
         {user?.email ? `Hello👋 ${user.email.split("@")[0]}` : "Not Signed in"}
       </DropdownMenuTrigger>
       <DropdownMenuContent className="flex flex-col gap-4">
-        {" "}
+        <DropdownMenuItem>
+          <Link to="/manage-restaurant" className="font-bold hover:text-orange-500">
+            Manage Restaurant
+          </Link>
+        </DropdownMenuItem>
         {/* Ensure content stacks vertically */}
         <DropdownMenuItem>
           <Link to="/user-profile" className="font-bold hover:text-orange-500">
@@ -42,3 +46,4 @@ const UsernameMenu = () => {
 };
 
 export default UsernameMenu;
+
