@@ -5,10 +5,11 @@ import {useCreateMyRestaurant, useGetMyRestaurant} from "@/api/MyRestaurantApi.t
 const ManageRestaurantPage = () => {
     const { createRestaurant, isLoading } = useCreateMyRestaurant();
     const {restaurant} = useGetMyRestaurant();
-
+    console.log("🚀 ~ ManageRestaurantPage ~ restaurant:", restaurant)
+    
     return (
         <ManageRestaurantForm
-            restaurant = {restaurant}
+            restaurant = {restaurant?.data}
             onSave={createRestaurant}
             isLoading={isLoading}
         />

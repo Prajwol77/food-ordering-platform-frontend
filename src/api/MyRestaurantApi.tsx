@@ -5,10 +5,15 @@ import { Restaurant } from "@/types.ts";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+type MyRestaurantType = {
+  message: string;
+  data: Restaurant
+}
+
 export const useGetMyRestaurant = () => {
   const { getAccessTokenSilently } = useAuth0();
 
-  const getMyRestaurantRequest = async (): Promise<Restaurant> => {
+  const getMyRestaurantRequest = async (): Promise<MyRestaurantType> => {
     const accessToken = await getAccessTokenSilently();
 
     const response = await fetch(`${API_BASE_URL}/api/my/restaurant`, {
