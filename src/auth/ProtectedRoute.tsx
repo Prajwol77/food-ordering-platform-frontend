@@ -13,6 +13,7 @@ const ProtectedRoute = () => {
     }
   }, [isLoading, isAuthenticated, navigate]);
 
+
   if (isLoading) {
     return (
       <Outlet/>
@@ -23,3 +24,4 @@ const ProtectedRoute = () => {
 };
 
 export default ProtectedRoute;
+
