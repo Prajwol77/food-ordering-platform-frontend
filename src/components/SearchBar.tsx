@@ -19,7 +19,7 @@ type Props = {
   onSubmit: (formData: SearchForm) => void;
   placeHolder: string;
   onReset?: () => void;
-  searchQuery: string;
+  searchQuery?: string;
 };
 
 const SearchBar = ({ onSubmit, onReset, placeHolder, searchQuery }: Props) => {
@@ -48,7 +48,7 @@ const SearchBar = ({ onSubmit, onReset, placeHolder, searchQuery }: Props) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className={`flex items-center flex-1 gap-3 justify-between border-2 rounded-full p-3 ${form.formState.errors.searchQuery && "border-red-500"}`}
+        className={`flex items-center gap-3 justify-between border-2 rounded-full p-3 ${form.formState.errors.searchQuery && "border-red-500"}`}
       >
         <Search
           strokeWidth={2.5}
