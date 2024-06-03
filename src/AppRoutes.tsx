@@ -1,10 +1,15 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import Layout from "@/layouts/layout.tsx";
-import HomePage from "@/pages/HomePage.tsx";
-import AuthCallbackPage from "@/pages/AuthCallbackPage.tsx";
-import UserProfilePage from "@/pages/UserProfilePage.tsx";
 import ProtectedRoute from "@/auth/ProtectedRoute.tsx";
-import ManageRestaurantPage from "@/pages/ManageRestaurantPage.tsx";
+import {
+  AdminPage,
+  AuthCallbackPage,
+  UserProfilePage,
+  HomePage,
+  ManageRestaurantPage,
+  AdminUserManagementPage,
+} from "./pages";
+import AdminLayout from "./layouts/AdminLayout";
 
 const AppRoutes = () => {
   return (
@@ -34,6 +39,24 @@ const AppRoutes = () => {
           element={
             <Layout>
               <ManageRestaurantPage />
+            </Layout>
+          }
+        />
+
+        <Route
+          path="/admin/dashboard"
+          element={
+            <AdminLayout>
+              <AdminPage />
+            </AdminLayout>
+          }
+        />
+
+        <Route
+          path="/admin/dashboard/user"
+          element={
+            <Layout>
+              <AdminUserManagementPage />
             </Layout>
           }
         />

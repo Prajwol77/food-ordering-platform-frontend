@@ -1,10 +1,11 @@
 export type User = {
-
+    isAdmin?: boolean;
     email:string;
     name:string;
     address:string;
     city:string;
     number:string;
+    auth0Id: string
 };
 
 export type MenuItemType = {
@@ -22,7 +23,7 @@ export type Restaurant = {
     deliveryPrice: number;
     estimatedDeliveryTime: number;
     cuisines: string[];
-    menuItems: menuItem[];
+    // menuItems: menuItem[];
     imageUrl: string;
     lastUpdated: string;
 
