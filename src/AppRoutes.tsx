@@ -59,9 +59,9 @@ const AppRoutes = () => {
         <Route
           path="/admin/dashboard/user"
           element={
-            <Layout>
+            <AdminLayout>
               <AdminUserManagementPage />
-            </Layout>
+            </AdminLayout>
           }
         />
       </Route>

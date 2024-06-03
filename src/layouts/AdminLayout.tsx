@@ -3,10 +3,10 @@ import React from "react";
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <>
+    <div className="flex">
       <AdminNav />
-      <div className="container mx-32 flex-1 py-10">{children}</div>
-    </>
+      <div className="container ml-[11rem] flex-1 py-10">{children}</div>
+    </div>
   );
 };
 

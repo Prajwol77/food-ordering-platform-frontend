@@ -10,14 +10,23 @@ const AuthCallbackPage = () => {
     const {createUser} = useCreateMyUser()
 
     const hasCreatedUser = useRef(false);
-    useEffect(()=>{
-        if(user?.sub && user?.email && !hasCreatedUser.current){
-            createUser({auth0Id: user.sub, email: user.email })
-            hasCreatedUser.current = true;
-        }
-        navigate("/");
-
-    },[createUser, navigate,user]);
+    useEffect(() => {
+        const handleUserCreation = async () => {
+          if (user?.sub && user?.email && !hasCreatedUser.current) {
+            try {
+              const users = await createUser({ auth0Id: user.sub, email: user.email });
+              if(users.isAdmin){
+                return navigate('/admin/dashboard');
+              }
+              hasCreatedUser.current = true;
+            } catch (error) {
+            }
+          }
+          navigate("/");
+        };
+    
+        handleUserCreation();
+      }, [createUser, navigate, user]);
 
     return <>Loading...</>
 

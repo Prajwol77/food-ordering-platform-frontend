@@ -4,6 +4,7 @@ import {
   useGetMyUser,
   useMakeMyUserAdmin,
 } from "@/api/MyUserApi";
+import { Button } from "@/components/ui/button";
 import { User } from "@/types";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -135,20 +136,20 @@ const AdminUserManagementPage = () => {
             </tbody>
           </table>
           <div className="mt-4 flex justify-between">
-            <button
+            <Button
               onClick={handlePreviousPage}
               className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-black"
               disabled={page === 1}
             >
               Previous
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={handleNextPage}
               className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-black"
               disabled={!hasNextPage}
             >
               Next
-            </button>
+            </Button>
           </div>
         </div>
       ) : (
