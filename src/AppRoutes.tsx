@@ -1,11 +1,18 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import Layout from "@/layouts/layout.tsx";
-import HomePage from "@/pages/HomePage.tsx";
-import AuthCallbackPage from "@/pages/AuthCallbackPage.tsx";
-import UserProfilePage from "@/pages/UserProfilePage.tsx";
 import ProtectedRoute from "@/auth/ProtectedRoute.tsx";
-import ManageRestaurantPage from "@/pages/ManageRestaurantPage.tsx";
+import {
+  AdminPage,
+  AuthCallbackPage,
+  UserProfilePage,
+  HomePage,
+  ManageRestaurantPage,
+  AdminUserManagementPage,
+  AdminRestaurantManagementPage,
+} from "./pages";
+import AdminLayout from "./layouts/AdminLayout";
 import SearchPage from "@/pages/SearchPage.tsx";
+import AdminProtectedRoute from "./auth/AdminProtectedRoute";
 
 const AppRoutes = () => {
   return (
@@ -19,9 +26,14 @@ const AppRoutes = () => {
         }
       />
       <Route path="/auth-callback" element={<AuthCallbackPage />} />
-        <Route path="/search/:city" element={<Layout showHero={false}>
+      <Route
+        path="/search/:city"
+        element={
+          <Layout showHero={false}>
             <SearchPage />
-        </Layout>} />
+          </Layout>
+        }
+      />
 
       <Route element={<ProtectedRoute />}>
         <Route
@@ -41,6 +53,35 @@ const AppRoutes = () => {
             </Layout>
           }
         />
+
+        <Route element={<AdminProtectedRoute />}>
+          <Route
+            path="/admin/dashboard"
+            element={
+              <AdminLayout>
+                <AdminPage />
+              </AdminLayout>
+            }
+          />
+
+          <Route
+            path="/admin/dashboard/user"
+            element={
+              <AdminLayout>
+                <AdminUserManagementPage />
+              </AdminLayout>
+            }
+          />
+
+          <Route
+            path="/admin/dashboard/restaurant"
+            element={
+              <AdminLayout>
+                <AdminRestaurantManagementPage />
+              </AdminLayout>
+            }
+          />
+        </Route>
       </Route>
 
       <Route path="*" element={<Navigate to="/" />} />
