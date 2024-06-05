@@ -4,6 +4,7 @@ import ManageRestaurantPage from "./ManageRestaurantPage";
 import UserProfilePage from "./UserProfilePage";
 import AdminPage from "./AdminPage";
 import AdminUserManagementPage from "./AdminUserManagementPage";
+import AdminRestaurantManagementPage from "./AdminRestaurantManagementPage";
 
 
 export {
@@ -12,6 +13,7 @@ export {
     ManageRestaurantPage,
     UserProfilePage,
     AdminPage,
-    AdminUserManagementPage
+    AdminUserManagementPage,
+    AdminRestaurantManagementPage
 }
 

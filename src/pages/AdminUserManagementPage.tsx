@@ -7,7 +7,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { User } from "@/types";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const AdminUserManagementPage = () => {
   const [page, setPage] = useState(1);
@@ -15,7 +14,6 @@ const AdminUserManagementPage = () => {
   const { deleteUser } = useDeleteMyUser();
   const { adminUser } = useMakeMyUserAdmin();
   const { allUsers } = useGetMyAllUsers(page);
-  const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
   const [total, setTotal] = useState(0);
 
@@ -52,14 +50,6 @@ const AdminUserManagementPage = () => {
       console.error("Failed to delete user:", error);
     }
   };
-
-  useEffect(() => {
-    if (!myUserLoading && currentUser) {
-      if (!currentUser.isAdmin) {
-        navigate("/");
-      }
-    }
-  }, [currentUser, myUserLoading, navigate]);
 
   useEffect(() => {
     if (allUsers) {
@@ -117,19 +107,19 @@ const AdminUserManagementPage = () => {
                     {user.number}
                   </td>
                   <td className="py-2 px-4 border-b border-gray-200">
-                    <button
+                    <Button
                       onClick={() => handleDelete(user.auth0Id)}
                       className="mr-2 bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700"
                       disabled={user.auth0Id === currentUser.auth0Id}
                     >
                       Delete User
-                    </button>
-                    <button
-                        onClick={() => handleAdminManagement(user.auth0Id)}
+                    </Button>
+                    <Button
+                      onClick={() => handleAdminManagement(user.auth0Id)}
                       className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700"
                     >
                       {user.isAdmin ? "Remove Admin" : "Make Admin"}
-                    </button>
+                    </Button>
                   </td>
                 </tr>
               ))}

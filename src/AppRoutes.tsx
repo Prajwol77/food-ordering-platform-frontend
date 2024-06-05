@@ -8,9 +8,11 @@ import {
   HomePage,
   ManageRestaurantPage,
   AdminUserManagementPage,
+  AdminRestaurantManagementPage,
 } from "./pages";
 import AdminLayout from "./layouts/AdminLayout";
 import SearchPage from "@/pages/SearchPage.tsx";
+import AdminProtectedRoute from "./auth/AdminProtectedRoute";
 
 const AppRoutes = () => {
   return (
@@ -24,9 +26,14 @@ const AppRoutes = () => {
         }
       />
       <Route path="/auth-callback" element={<AuthCallbackPage />} />
-        <Route path="/search/:city" element={<Layout showHero={false}>
+      <Route
+        path="/search/:city"
+        element={
+          <Layout showHero={false}>
             <SearchPage />
-        </Layout>} />
+          </Layout>
+        }
+      />
 
       <Route element={<ProtectedRoute />}>
         <Route
@@ -47,23 +54,34 @@ const AppRoutes = () => {
           }
         />
 
-        <Route
-          path="/admin/dashboard"
-          element={
-            <AdminLayout>
-              <AdminPage />
-            </AdminLayout>
-          }
-        />
+        <Route element={<AdminProtectedRoute />}>
+          <Route
+            path="/admin/dashboard"
+            element={
+              <AdminLayout>
+                <AdminPage />
+              </AdminLayout>
+            }
+          />
 
-        <Route
-          path="/admin/dashboard/user"
-          element={
-            <AdminLayout>
-              <AdminUserManagementPage />
-            </AdminLayout>
-          }
-        />
+          <Route
+            path="/admin/dashboard/user"
+            element={
+              <AdminLayout>
+                <AdminUserManagementPage />
+              </AdminLayout>
+            }
+          />
+
+          <Route
+            path="/admin/dashboard/restaurant"
+            element={
+              <AdminLayout>
+                <AdminRestaurantManagementPage />
+              </AdminLayout>
+            }
+          />
+        </Route>
       </Route>
 
       <Route path="*" element={<Navigate to="/" />} />

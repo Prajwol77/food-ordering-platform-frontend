@@ -10,6 +10,11 @@ type MyRestaurantType = {
   data: Restaurant;
 };
 
+type AllRestaurantDataType = {
+  restaurants: Restaurant[];
+  total: number;
+};
+
 export const useGetMyRestaurant = () => {
   const { getAccessTokenSilently } = useAuth0();
 
@@ -110,4 +115,41 @@ export const useUpdateMyRestaurant = () => {
   }
 
   return {updateRestaurant, isLoading};
+};
+
+export const useGetMyAllRestaurant = (page: number) => {
+  const { getAccessTokenSilently } = useAuth0();
+
+  const getMyAllRestaurantRequest = async (page: number) => {
+    const accessToken = await getAccessTokenSilently();
+
+    const response = await fetch(`${API_BASE_URL}/api/my/restaurant/getAllMyRestaurant?page=${page}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user");
+    }
+    const data: AllRestaurantDataType = await response.json();
+    console.log("🚀 ~ getMyAllRestaurantRequest ~ data:", data.restaurants[0])
+    return data;
+  };
+
+  const {
+    data: allRestaurants,
+    isLoading,
+    error,
+  } = useQuery<AllRestaurantDataType, Error>(['fetchAllRestaurants', page], () => getMyAllRestaurantRequest(page), {
+    keepPreviousData: true,
+  });
+
+  if (error) {
+    toast.error(error.toString());
+  }
+
+  return { allRestaurants, isLoading };
 };

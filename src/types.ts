@@ -12,7 +12,6 @@ export type MenuItem = {
     _id: string;
     name: string;
     price: number;
-
 }
 
 export type Restaurant = {
@@ -23,14 +22,9 @@ export type Restaurant = {
     deliveryPrice: number;
     estimatedDeliveryTime: number;
     cuisines: string[];
-<<<<<<< HEAD
-    // menuItems: menuItem[];
-=======
     menuItems: MenuItem[];
->>>>>>> 8f124f7ba1c9ef9c95bf022e551a87617329eec3
     imageUrl: string;
     lastUpdated: string;
-
 }
 
 export type RestaurantSearchResponse = {
