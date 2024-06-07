@@ -1,4 +1,4 @@
-import { useAuth0 } from "@auth0/auth0-react";
+import { useAuth0 } from '@auth0/auth0-react';
 import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";
 import { Restaurant } from "@/types.ts";
@@ -135,7 +135,6 @@ export const useGetMyAllRestaurant = (page: number) => {
       throw new Error("Failed to fetch user");
     }
     const data: AllRestaurantDataType = await response.json();
-    console.log("🚀 ~ getMyAllRestaurantRequest ~ data:", data.restaurants[0])
     return data;
   };
 
@@ -152,4 +151,78 @@ export const useGetMyAllRestaurant = (page: number) => {
   }
 
   return { allRestaurants, isLoading };
+};
+
+
+export const useGetRestaurantByID = (id: string) => {
+  const { getAccessTokenSilently } = useAuth0();
+
+  const getRestaurantByIDRequest = async (id: string) => {
+    const accessToken = await getAccessTokenSilently();
+
+    const response = await fetch(`${API_BASE_URL}/api/my/restaurant/getRestaurantById?restaurantID=${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user");
+    }
+    const data = await response.json();
+    return data;
+  };
+
+  const {
+    data: restaurant,
+    isLoading,
+    error,
+  } = useQuery(['fetchMyRestaurantByID'], () => getRestaurantByIDRequest(id));
+
+  if (error) {
+    toast.error(error.toString());
+  }
+
+  return { restaurant, isLoading };
+};
+
+export const useDeleteMyRestaurant = () => {
+  const { getAccessTokenSilently } = useAuth0();
+  const deleteMyRestaurantRequest = async (restaurantId: string) => {
+    const accessToken = await getAccessTokenSilently();
+    const response = await fetch(`${API_BASE_URL}/api/my/restaurant/deleteRestaurant?restaurantId=${restaurantId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete restaurant");
+    }
+
+    return response.json();
+  };
+
+  const {
+    mutateAsync: deleteRestaurant,
+    isLoading,
+    isSuccess,
+    error,
+    reset,
+  } = useMutation(deleteMyRestaurantRequest);
+
+  if (isSuccess) {
+    toast.success("Restaurant Deleted Successfully!");
+  }
+
+  if (error) {
+    toast.error(error.toString());
+    reset();
+  }
+
+  return { deleteRestaurant, isLoading };
 };
