@@ -7,8 +7,8 @@ import MobileNav from "./MobileNav";
 import MobileNavLinks from "./MobileNavLinks";
 import UsernameMenu from "./UsernameMenu";
 import AdminNav from "./AdminNav";
-
-
+import Graph from "./Graph";
+import PieChart from "./PieChart";
 
 export {
     Footer,
@@ -19,6 +19,8 @@ export {
     MobileNav,
     MobileNavLinks,
     UsernameMenu,
-    AdminNav
+    AdminNav,
+    Graph,
+    PieChart
 }
 

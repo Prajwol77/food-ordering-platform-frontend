@@ -2,12 +2,13 @@ import {
   useDeleteMyRestaurant,
   useGetRestaurantByID,
 } from "@/api/MyRestaurantApi";
+import { Graph } from "@/components";
 import { Button } from "@/components/ui/button";
 import { MenuItem } from "@/types";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
-const AdminRestaurantFullDetailsPage = () => {
+const RestaurantFullDetailsPage = () => {
   const { id = "" } = useParams();
   const { restaurant, isLoading } = useGetRestaurantByID(id);
   const { deleteRestaurant } = useDeleteMyRestaurant();
@@ -29,7 +30,7 @@ const AdminRestaurantFullDetailsPage = () => {
 
   return (
     <>
-      <div className="container mx-auto p-4">
+      <div className="container mx-auto p-4"> 
         <div className="bg-white shadow-lg rounded-lg overflow-hidden">
           <img
             src={restaurant.imageUrl}
@@ -93,8 +94,9 @@ const AdminRestaurantFullDetailsPage = () => {
           </div>
         </div>
       </div>
+      <Graph/>
     </>
   );
 };
 
-export default AdminRestaurantFullDetailsPage;
+export default RestaurantFullDetailsPage;
