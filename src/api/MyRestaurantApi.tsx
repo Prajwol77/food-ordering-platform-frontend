@@ -226,3 +226,37 @@ export const useDeleteMyRestaurant = () => {
 
   return { deleteRestaurant, isLoading };
 };
+
+export const useGetAllUsersAndRestaurant = () => {
+  const { getAccessTokenSilently } = useAuth0();
+
+  const getAllUsersAndRestaurantRequest = async () => {
+    const accessToken = await getAccessTokenSilently();
+
+    const response = await fetch(`${API_BASE_URL}/api/my/restaurant/allUserAndRestaurant`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user");
+    }
+    const data = await response.json();
+    return data;
+  };
+
+  const {
+    data: usersAndRestaurantCountType,
+    isLoading,
+    error,
+  } = useQuery(['fetchMyUsersAndRestaurantCount'], getAllUsersAndRestaurantRequest);
+
+  if (error) {
+    toast.error(error.toString());
+  }
+
+  return { usersAndRestaurantCountType, isLoading };
+};

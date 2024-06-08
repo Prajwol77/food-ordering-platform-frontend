@@ -13,7 +13,7 @@ const AdminNav = () => {
             className="p-4 hover:bg-gray-700 cursor-pointer"
             onClick={() => navigate("/admin/dashboard")}
           >
-            Admin
+            Overview
           </Button>
           <Button
             className="p-4 hover:bg-gray-700 cursor-pointer"
