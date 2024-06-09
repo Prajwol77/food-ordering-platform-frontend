@@ -13,6 +13,7 @@ import {
 import AdminLayout from "./layouts/AdminLayout";
 import SearchPage from "@/pages/SearchPage.tsx";
 import AdminProtectedRoute from "./auth/AdminProtectedRoute";
+import DetailPage from "@/pages/DetailPage.tsx";
 
 const AppRoutes = () => {
   return (
@@ -34,6 +35,14 @@ const AppRoutes = () => {
           </Layout>
         }
       />
+        <Route
+            path="/detail/:restaurantId"
+            element={
+                <Layout showHero={false}>
+                    <DetailPage />
+                </Layout>
+            }
+        />
 
       <Route element={<ProtectedRoute />}>
         <Route
