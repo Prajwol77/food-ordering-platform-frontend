@@ -86,27 +86,30 @@ const SearchPage = () => {
         />
       </div>
       <div id="main-content" className="flex flex-col gap-5">
+        <div className="mb-4 text-center">
+          <span className="text-xl font-bold">You have selected {city}. Now search for restaurants or cuisines in this city.</span>
+        </div>
         <SearchBar
-          searchQuery={searchState.searchQuery}
-          onSubmit={setSearchQuery}
-          placeHolder="Search by Cuisine or Restaurant Name"
-          onReset={resetSearch}
+            searchQuery={searchState.searchQuery}
+            onSubmit={setSearchQuery}
+            placeHolder={`Search for restaurants or cuisines in ${city}`}
+            onReset={resetSearch}
         />
         <div className="flex justify-between flex-col gap-3 lg:flex-row">
-          <SearchResultInfo total={results.pagination.total} city={city} />
+          <SearchResultInfo total={results.pagination.total} city={city}/>
           <SortOptionDropdown
-            sortOption={searchState.sortOption}
-            onChange={(value) => setSortOption(value)}
+              sortOption={searchState.sortOption}
+              onChange={(value) => setSortOption(value)}
           />
         </div>
 
         {results.data.map((restaurant, index) => (
-          <SearchResultCard restaurant={restaurant} key={index} />
+            <SearchResultCard restaurant={restaurant} key={index}/>
         ))}
         <PaginationSelector
-          page={results.pagination.page}
-          pages={results.pagination.pages}
-          onPageChange={setPage}
+            page={results.pagination.page}
+            pages={results.pagination.pages}
+            onPageChange={setPage}
         />
       </div>
     </div>
