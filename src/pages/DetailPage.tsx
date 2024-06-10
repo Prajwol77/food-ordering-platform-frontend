@@ -1,15 +1,19 @@
 import { useGetRestaurant } from "@/api/RestaurantApi.tsx";
 import { useParams } from "react-router-dom";
 import { AspectRatio } from "@/components/ui/aspect-ratio.tsx";
+import RestaurantInfo from "@/components/RestaurantInfo.tsx";
 import MenuItem from "@/components/MenuItem.tsx";
 import { useEffect, useState } from "react";
-import { Card } from "@/components/ui/card.tsx";
+import { Card, CardFooter } from "@/components/ui/card.tsx";
+import OrderSummary from "@/components/OrderSummary.tsx";
 import { MenuItem as MenuItemType } from "../types";
-import { CommentSection, UpdateRating, OrderSummary, RestaurantInfo } from "@/components";
+import CheckoutButton from "@/components/CheckoutButton.tsx";
+import {UserFormData} from "@/forms/user-profile-form/UserProfileForm.tsx";
 import { StarFilledIcon, StarIcon } from "@radix-ui/react-icons";
+import { CommentSection, UpdateRating } from "@/components";
 
 export type CartItem = {
-  _id: string;
+  id: string;
   name: string;
   price: number;
   quantity: number;
@@ -19,41 +23,79 @@ const DetailPage = () => {
   const { restaurantId } = useParams();
   const { restaurant, isLoading } = useGetRestaurant(restaurantId);
   const [totalStar, setTotalStar] = useState(0);
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+  const [cartItems, setCartItems] = useState<CartItem[]>(()=>{
+    const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
+    return storedCartItems ? JSON.parse(storedCartItems): [];
+  });
 
   const addToCart = (menuItem: MenuItemType) => {
     setCartItems((prevCartItems) => {
-      // 1. Check if the item is already in the cart
       const existingCartItem = prevCartItems.find(
-        (cartItem) => cartItem._id === menuItem._id
+        (cartItem) => cartItem.id === menuItem._id,
       );
 
       let updatedCartItems;
-      // 2. If the item is in cart, update the quantity
       if (existingCartItem) {
         updatedCartItems = prevCartItems.map((cartItem) =>
-          cartItem._id === menuItem._id
+          cartItem.id === menuItem._id
             ? {
                 ...cartItem,
                 quantity: cartItem.quantity + 1,
               }
-            : cartItem
+            : cartItem,
         );
       } else {
         updatedCartItems = [
           ...prevCartItems,
           {
-            _id: menuItem._id,
+            id: menuItem._id,
             name: menuItem.name,
             price: menuItem.price,
             quantity: 1,
           },
         ];
       }
-      // 3. If item is not in cart, add it as a new item
+
+      sessionStorage.setItem(
+        `cartItems-${restaurantId}`,
+        JSON.stringify(updatedCartItems),
+      );
+
       return updatedCartItems;
     });
   };
+
+  const removeFromCart = (cartItem: CartItem) => {
+    setCartItems((prevCartItems) => {
+      const existingCartItem = prevCartItems.find(
+        (item) => item.id === cartItem.id,
+      );
+
+      sessionStorage.setItem(
+          `cartItems-${restaurantId}`,
+          JSON.stringify(existingCartItem),
+      );
+
+      if (!existingCartItem) {
+        return prevCartItems;
+      }
+
+      if (existingCartItem.quantity === 1) {
+        return prevCartItems.filter((item) => item.id !== cartItem.id);
+      }
+
+      return prevCartItems.map((item) =>
+        item.id === cartItem.id
+          ? { ...item, quantity: item.quantity - 1 }
+          : item,
+      );
+    });
+  };
+
+  const onCheckout = (userFormData: UserFormData)=>{
+      console.log("userFormData", userFormData);
+  }
 
   useEffect(() => {
     if (restaurant) {
@@ -89,9 +131,8 @@ const DetailPage = () => {
         <div className="flex flex-col gap-4">
           <RestaurantInfo restaurant={restaurant} />
           <span className="text-2xl font-bold tracking-tight">Menu</span>
-          {restaurant.menuItems.map((menuItem, index) => (
+          {restaurant.menuItems.map((menuItem) => (
             <MenuItem
-              key={index}
               menuItem={menuItem}
               addToCart={() => addToCart(menuItem)}
             />
@@ -99,7 +140,14 @@ const DetailPage = () => {
         </div>
         <div>
           <Card>
-            <OrderSummary restaurant={restaurant} cartItems={cartItems} />
+            <OrderSummary
+              restaurant={restaurant}
+              cartItems={cartItems}
+              removeFromCart={removeFromCart}
+            />
+            <CardFooter>
+              <CheckoutButton disabled={cartItems.length === 0} onCheckout={onCheckout}/>
+            </CardFooter>
           </Card>
           <UpdateRating
             restaurantID={restaurant._id}
@@ -111,4 +159,5 @@ const DetailPage = () => {
     </div>
   );
 };
+
 export default DetailPage;
