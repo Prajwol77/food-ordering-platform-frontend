@@ -25,6 +25,24 @@ const initialData = {
   ],
 };
 
+const options = {
+  plugins: {
+    tooltip: {
+      callbacks: {
+        label: function (context: any) {
+          let label = context.label;
+          if (context.label === "Momo") {
+            label = "Food";
+          } else if (context.label === "Cheese Pizza") {
+            label = "Sold";
+          }
+          return `${label}: ${context.raw}`;
+        },
+      },
+    },
+  },
+};
+
 const PieChart = ({
   titles,
   count,
@@ -42,13 +60,15 @@ const PieChart = ({
       initialData.datasets[0].data = count;
     }
     if (label) {
+      
       initialData.datasets[0].label = label;
     }
+
   }, [titles]);
 
   return (
     <>
-      <Pie data={initialData} />
+      <Pie data={initialData} options={options}/>
     </>
   );
 };
