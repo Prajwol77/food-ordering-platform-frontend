@@ -146,7 +146,7 @@ export const useDeleteMyUser = () => {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to update user");
+      throw new Error("Failed to delete user");
     }
 
     return response.json();

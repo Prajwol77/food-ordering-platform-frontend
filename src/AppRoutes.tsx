@@ -9,6 +9,7 @@ import {
   ManageRestaurantPage,
   AdminUserManagementPage,
   AdminRestaurantManagementPage,
+  RestaurantFullDetailsPage,
 } from "./pages";
 import AdminLayout from "./layouts/AdminLayout";
 import SearchPage from "@/pages/SearchPage.tsx";
@@ -36,7 +37,7 @@ const AppRoutes = () => {
         }
       />
         <Route
-            path="/detail/:restaurantId"
+            path="/detail/restaurant/:restaurantId"
             element={
                 <Layout showHero={false}>
                     <DetailPage />
@@ -59,6 +60,15 @@ const AppRoutes = () => {
           element={
             <Layout>
               <ManageRestaurantPage />
+            </Layout>
+          }
+        />
+
+        <Route
+          path="/detail/restaurant/:id"
+          element={
+            <Layout>
+              <RestaurantFullDetailsPage />
             </Layout>
           }
         />

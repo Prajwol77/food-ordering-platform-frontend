@@ -2,13 +2,14 @@ import { useGetMyAllRestaurant } from "@/api/MyRestaurantApi";
 import { Button } from "@/components/ui/button";
 import { Restaurant } from "@/types";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AdminRestaurantManagementPage = () => {
   const [page, setPage] = useState(1);
-  //   const { currentUser, isLoading: myUserLoading } = useGetMyUser();
   const { allRestaurants } = useGetMyAllRestaurant(page);
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [total, setTotal] = useState(0);
+  const navigate = useNavigate();
 
   const hasNextPage = page * 10 < total;
 
@@ -26,10 +27,6 @@ const AdminRestaurantManagementPage = () => {
       setTotal(allRestaurants.total);
     }
   }, [allRestaurants]);
-
-  //   if (myUserLoading) {
-  //     return <>Loading...</>;
-  //   }
 
   return (
     <>
@@ -56,7 +53,7 @@ const AdminRestaurantManagementPage = () => {
                 Menu Items
               </th>
               <th className="py-2 px-4 border-b border-gray-200 bg-gray-50 text-sm font-semibold text-gray-600 text-center">
-                Image URL
+                Restaurant
               </th>
               <th className="py-2 px-4 border-b border-gray-200 bg-gray-50 text-sm font-semibold text-gray-600 text-center">
                 Last Updated
@@ -66,7 +63,7 @@ const AdminRestaurantManagementPage = () => {
           <tbody>
             {restaurants?.map((restaurant, index) => (
               <tr key={index}>
-                <td className="py-2 px-4 border-b border-gray-200 text-center">
+                <td className="py-2 px-4 border-b border-gray-200 text-center cursor-pointer underline underline-offset-2" onClick={() => navigate(`/detail/restaurant/${restaurant._id.toString()}`)}>
                   {restaurant.restaurantName}
                 </td>
                 <td className="py-2 px-4 border-b border-gray-200 text-center">
