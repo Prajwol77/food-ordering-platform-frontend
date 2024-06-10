@@ -1,7 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";
-import { Restaurant } from "@/types.ts";
+import { CommentSectionType, Restaurant } from "@/types.ts";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -14,6 +14,18 @@ type AllRestaurantDataType = {
   restaurants: Restaurant[];
   total: number;
 };
+
+type UpdateReviewType = { 
+  reviewStars: number | null
+  restaurantID: string
+  userId: string
+  comment: string
+}
+
+type CommentForRestaurantType = {
+  data: CommentSectionType[];
+  count: number
+}
 
 export const useGetMyRestaurant = () => {
   const { getAccessTokenSilently } = useAuth0();
@@ -259,4 +271,65 @@ export const useGetAllUsersAndRestaurant = () => {
   }
 
   return { usersAndRestaurantCountType, isLoading };
+};
+
+export const useUpdateRestaurantRating = () => {
+  const { getAccessTokenSilently } = useAuth0();
+
+  const getUpdateRestaurantRatingRequest = async ({ reviewStars, restaurantID, userId, comment }:UpdateReviewType) => {
+    const accessToken = await getAccessTokenSilently();
+    const response = await fetch(`${API_BASE_URL}/api/my/restaurant/rating`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ reviewStars, restaurantID, userId, comment })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update rating');
+    }
+
+    const data = response.json();
+    return data
+  };
+
+  const { mutate: updateRestaurantRating, isLoading, error, data } = useMutation(getUpdateRestaurantRatingRequest, {
+    onError: (error) => {
+      toast.error(error?.toString());
+    },
+    onSuccess: () => {
+      toast.success('Rating updated successfully!');
+    }
+  });
+
+  return { updateRestaurantRating, isLoading, error, data };
+};
+
+export const useGetAllCommentForRestaurant = (restaurantID: string, page: number, limit: number) => {
+  const { getAccessTokenSilently } = useAuth0();
+
+  const fetchComments = async () => {
+    const accessToken = await getAccessTokenSilently();
+    const response = await fetch(`${API_BASE_URL}/api/my/restaurant/getCommentForRestaurant?restaurantID=${restaurantID}&page=${page}&limit=${limit}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch comments');
+    }
+    const res: CommentForRestaurantType = await response.json()
+    return res;
+  };
+
+  return useQuery(['comments', restaurantID, page, limit], fetchComments, {
+    onError: (error) => {
+      toast.error(error?.toString());
+    },
+  });
 };

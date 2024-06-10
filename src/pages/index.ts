@@ -7,6 +7,7 @@ import AdminUserManagementPage from "./AdminUserManagementPage";
 import AdminRestaurantManagementPage from "./AdminRestaurantManagementPage";
 import RestaurantFullDetailsPage from "./RestaurantFullDetailsPage";
 import Maps from "./Maps";
+import DetailPage from "./DetailPage";
 
 export {
     AuthCallbackPage,
@@ -17,6 +18,7 @@ export {
     AdminUserManagementPage,
     AdminRestaurantManagementPage,
     RestaurantFullDetailsPage,
-    Maps
+    Maps,
+    DetailPage
 }
 

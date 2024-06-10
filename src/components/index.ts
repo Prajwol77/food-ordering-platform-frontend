@@ -9,6 +9,12 @@ import UsernameMenu from "./UsernameMenu";
 import AdminNav from "./AdminNav";
 import Graph from "./Graph";
 import PieChart from "./PieChart";
+import UpdateRating from "./UpdateRating";
+import CommentSection from "./CommentSection";
+import OrderSummary from "./OrderSummary";
+import RestaurantInfo from "./RestaurantInfo";
+
+
 
 export {
     Footer,
@@ -21,6 +27,10 @@ export {
     UsernameMenu,
     AdminNav,
     Graph,
-    PieChart
+    PieChart,
+    UpdateRating,
+    CommentSection,
+    OrderSummary,
+    RestaurantInfo,
 }
 

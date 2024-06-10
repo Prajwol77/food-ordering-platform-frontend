@@ -25,6 +25,8 @@ export type Restaurant = {
     menuItems: MenuItem[];
     imageUrl: string;
     lastUpdated: string;
+    averageRating: number,
+    numberOfRatings: number
 }
 
 export type RestaurantSearchResponse = {
@@ -35,4 +37,19 @@ export type RestaurantSearchResponse = {
         pages: number;
     }
 
+}
+
+export type CommentSectionType = {
+    _id: string;
+    userId: CommentSectionForUserType;
+    restaurantID: string;
+    ratingValue: number;
+    comment: string;
+    createdAt: Date;
+    updatedAt: Date
+}
+
+export type CommentSectionForUserType = {
+    _id: string;
+    name: string;
 }
