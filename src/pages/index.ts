@@ -5,7 +5,7 @@ import UserProfilePage from "./UserProfilePage";
 import AdminPage from "./AdminPage";
 import AdminUserManagementPage from "./AdminUserManagementPage";
 import AdminRestaurantManagementPage from "./AdminRestaurantManagementPage";
-import RestaurantFullDetailsPage from "./RestaurantFullDetailsPage";
+import AdminRestaurantFullDetailsPage from "./AdminRestaurantFullDetailsPage";
 import Maps from "./Maps";
 import DetailPage from "./DetailPage";
 
@@ -17,7 +17,7 @@ export {
     AdminPage,
     AdminUserManagementPage,
     AdminRestaurantManagementPage,
-    RestaurantFullDetailsPage,
+    AdminRestaurantFullDetailsPage,
     Maps,
     DetailPage
 }

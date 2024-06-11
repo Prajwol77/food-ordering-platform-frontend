@@ -8,7 +8,7 @@ import { MenuItem } from "@/types";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
-const RestaurantFullDetailsPage = () => {
+const AdminRestaurantFullDetailsPage = () => {
   const { id = "" } = useParams();
   const { restaurant, isLoading } = useGetRestaurantByID(id);
   const { deleteRestaurant } = useDeleteMyRestaurant();
@@ -99,4 +99,4 @@ const RestaurantFullDetailsPage = () => {
   );
 };
 
-export default RestaurantFullDetailsPage;
+export default AdminRestaurantFullDetailsPage;

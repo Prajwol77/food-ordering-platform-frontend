@@ -24,7 +24,7 @@ const UpdateRating = ({
   return (
     <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
       <h1 className="text-2xl font-bold text-center mb-4">
-        Update Restaurant Rating
+        Rate the Restaurant
       </h1>
       <div className="flex items-center mb-4">
         {[...Array(5)].map((_, index) => (
@@ -56,7 +56,7 @@ const UpdateRating = ({
         disabled={isLoading}
         className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 disabled:bg-blue-300"
       >
-        {isLoading ? "Updating..." : "Update Rating"}
+        {isLoading ? "Posting..." : "Post"}
       </button>
     </div>
   );

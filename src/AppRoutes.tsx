@@ -9,7 +9,7 @@ import {
   ManageRestaurantPage,
   AdminUserManagementPage,
   AdminRestaurantManagementPage,
-  RestaurantFullDetailsPage,
+  AdminRestaurantFullDetailsPage,
   DetailPage,
   Maps,
 } from "./pages";
@@ -69,7 +69,7 @@ const AppRoutes = () => {
           path="/admin/restaurant/:id"
           element={
             <Layout>
-              <RestaurantFullDetailsPage />
+              <AdminRestaurantFullDetailsPage />
             </Layout>
           }
         />

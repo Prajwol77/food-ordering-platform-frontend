@@ -31,11 +31,6 @@ const options = {
       callbacks: {
         label: function (context: any) {
           let label = context.label;
-          if (context.label === "Momo") {
-            label = "Food";
-          } else if (context.label === "Cheese Pizza") {
-            label = "Sold";
-          }
           return `${label}: ${context.raw}`;
         },
       },

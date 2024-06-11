@@ -63,7 +63,7 @@ const AdminRestaurantManagementPage = () => {
           <tbody>
             {restaurants?.map((restaurant, index) => (
               <tr key={index}>
-                <td className="py-2 px-4 border-b border-gray-200 text-center cursor-pointer underline underline-offset-2" onClick={() => navigate(`/detail/restaurant/${restaurant._id.toString()}`)}>
+                <td className="py-2 px-4 border-b border-gray-200 text-center cursor-pointer underline underline-offset-2" onClick={() => navigate(`/admin/restaurant/${restaurant._id.toString()}`)}>
                   {restaurant.restaurantName}
                 </td>
                 <td className="py-2 px-4 border-b border-gray-200 text-center">
