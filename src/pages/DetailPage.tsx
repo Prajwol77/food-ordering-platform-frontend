@@ -8,9 +8,10 @@ import { Card, CardFooter } from "@/components/ui/card.tsx";
 import OrderSummary from "@/components/OrderSummary.tsx";
 import { MenuItem as MenuItemType } from "../types";
 import CheckoutButton from "@/components/CheckoutButton.tsx";
-import {UserFormData} from "@/forms/user-profile-form/UserProfileForm.tsx";
+import { UserFormData } from "@/forms/user-profile-form/UserProfileForm.tsx";
 import { StarFilledIcon, StarIcon } from "@radix-ui/react-icons";
 import { CommentSection, UpdateRating } from "@/components";
+import { useGetMyUser } from "@/api/MyUserApi";
 
 export type CartItem = {
   id: string;
@@ -23,16 +24,17 @@ const DetailPage = () => {
   const { restaurantId } = useParams();
   const { restaurant, isLoading } = useGetRestaurant(restaurantId);
   const [totalStar, setTotalStar] = useState(0);
+  const { currentUser, isLoading: isCurrentUserLoading } = useGetMyUser();
 
-  const [cartItems, setCartItems] = useState<CartItem[]>(()=>{
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
-    return storedCartItems ? JSON.parse(storedCartItems): [];
+    return storedCartItems ? JSON.parse(storedCartItems) : [];
   });
 
   const addToCart = (menuItem: MenuItemType) => {
     setCartItems((prevCartItems) => {
       const existingCartItem = prevCartItems.find(
-        (cartItem) => cartItem.id === menuItem._id,
+        (cartItem) => cartItem.id === menuItem._id
       );
 
       let updatedCartItems;
@@ -43,7 +45,7 @@ const DetailPage = () => {
                 ...cartItem,
                 quantity: cartItem.quantity + 1,
               }
-            : cartItem,
+            : cartItem
         );
       } else {
         updatedCartItems = [
@@ -59,7 +61,7 @@ const DetailPage = () => {
 
       sessionStorage.setItem(
         `cartItems-${restaurantId}`,
-        JSON.stringify(updatedCartItems),
+        JSON.stringify(updatedCartItems)
       );
 
       return updatedCartItems;
@@ -69,12 +71,12 @@ const DetailPage = () => {
   const removeFromCart = (cartItem: CartItem) => {
     setCartItems((prevCartItems) => {
       const existingCartItem = prevCartItems.find(
-        (item) => item.id === cartItem.id,
+        (item) => item.id === cartItem.id
       );
 
       sessionStorage.setItem(
-          `cartItems-${restaurantId}`,
-          JSON.stringify(existingCartItem),
+        `cartItems-${restaurantId}`,
+        JSON.stringify(existingCartItem)
       );
 
       if (!existingCartItem) {
@@ -88,14 +90,14 @@ const DetailPage = () => {
       return prevCartItems.map((item) =>
         item.id === cartItem.id
           ? { ...item, quantity: item.quantity - 1 }
-          : item,
+          : item
       );
     });
   };
 
-  const onCheckout = (userFormData: UserFormData)=>{
-      console.log("userFormData", userFormData);
-  }
+  const onCheckout = (userFormData: UserFormData) => {
+    console.log("userFormData", userFormData);
+  };
 
   useEffect(() => {
     if (restaurant) {
@@ -103,7 +105,7 @@ const DetailPage = () => {
     }
   }, [restaurant, isLoading]);
 
-  if (isLoading || !restaurant) {
+  if (isLoading || !restaurant || isCurrentUserLoading) {
     return "Loading...";
   }
 
@@ -131,8 +133,9 @@ const DetailPage = () => {
         <div className="flex flex-col gap-4">
           <RestaurantInfo restaurant={restaurant} />
           <span className="text-2xl font-bold tracking-tight">Menu</span>
-          {restaurant.menuItems.map((menuItem) => (
+          {restaurant.menuItems.map((menuItem, index) => (
             <MenuItem
+              key={index}
               menuItem={menuItem}
               addToCart={() => addToCart(menuItem)}
             />
@@ -146,15 +149,18 @@ const DetailPage = () => {
               removeFromCart={removeFromCart}
             />
             <CardFooter>
-              <CheckoutButton disabled={cartItems.length === 0} onCheckout={onCheckout}/>
+              <CheckoutButton
+                disabled={cartItems.length === 0}
+                onCheckout={onCheckout}
+              />
             </CardFooter>
           </Card>
           <UpdateRating
             restaurantID={restaurant._id}
-            userId={restaurant.user}
+            userId={currentUser._id}
           />
         </div>
-        <CommentSection restaurantID={restaurant._id}/>
+        <CommentSection restaurantID={restaurant._id} />
       </div>
     </div>
   );

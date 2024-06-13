@@ -18,6 +18,8 @@ const UpdateRating = ({
   };
 
   const handleUpdateRating = () => {
+    console.log("🚀 ~ handleUpdateRating ~ userId:", userId);
+    debugger
     updateRestaurantRating({ reviewStars, restaurantID, userId, comment });
   };
 

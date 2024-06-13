@@ -52,4 +52,5 @@ export type CommentSectionType = {
 export type CommentSectionForUserType = {
     _id: string;
     name: string;
+    email: string
 }

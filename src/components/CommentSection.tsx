@@ -24,7 +24,6 @@ const CommentSection = ({ restaurantID }: { restaurantID: string }) => {
 
   useEffect(() => {
     if (!isLoading && comments) {
-      console.log("🚀 ~ useEffect ~ comments:", comments);
       setLimit(comments.count);
     }
   }, [isLoading]);
@@ -47,7 +46,7 @@ const CommentSection = ({ restaurantID }: { restaurantID: string }) => {
             <AvatarIcon className="w-6 h-6" />
             <div className="flex gap-5">
               <p className="text-gray-700 font-semibold">
-                {comment.userId.name}
+                {comment.userId.name ? comment.userId.name : comment.userId.email}
               </p>
               <p className="text-gray-600">{comment.comment}</p>
             </div>
