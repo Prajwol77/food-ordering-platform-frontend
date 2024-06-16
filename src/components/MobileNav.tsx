@@ -10,9 +10,11 @@ import { Separator } from "@/components/ui/separator.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import MobileNavLinks from "@/components/MobileNavLinks.tsx";
+import { useNavigate } from "react-router-dom";
 
 const MobileNav = () => {
   const { isAuthenticated, loginWithRedirect, user } = useAuth0();
+  const navigate = useNavigate();
   return (
     <Sheet>
       <SheetTrigger>
@@ -34,7 +36,8 @@ const MobileNav = () => {
           {isAuthenticated ? (
             <MobileNavLinks />
           ) : (
-            <Button onClick={()=>loginWithRedirect()}  className="flex-1 font-bold bg-orange-500">Log In</Button>
+            // <Button onClick={()=>loginWithRedirect()}  className="flex-1 font-bold bg-orange-500">Log In</Button>
+            <Button onClick={() => navigate('/login')} className="flex-1 font-bold bg-orange-500">Log In</Button>            
           )}
         </SheetDescription>
       </SheetContent>

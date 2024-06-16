@@ -12,6 +12,8 @@ import {
   AdminRestaurantFullDetailsPage,
   DetailPage,
   Maps,
+  LoginPage,
+  RegisterPage
 } from "./pages";
 import AdminLayout from "./layouts/AdminLayout";
 import SearchPage from "@/pages/SearchPage.tsx";
@@ -25,6 +27,22 @@ const AppRoutes = () => {
         element={
           <Layout showHero>
             <HomePage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/login"
+        element={
+          <Layout>
+            <LoginPage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <Layout>
+            <RegisterPage />
           </Layout>
         }
       />

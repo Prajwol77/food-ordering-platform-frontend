@@ -8,6 +8,8 @@ import AdminRestaurantManagementPage from "./AdminRestaurantManagementPage";
 import AdminRestaurantFullDetailsPage from "./AdminRestaurantFullDetailsPage";
 import Maps from "./Maps";
 import DetailPage from "./DetailPage";
+import LoginPage from "./LoginPage";
+import RegisterPage from "./RegisterPage";
 
 export {
     AuthCallbackPage,
@@ -19,6 +21,8 @@ export {
     AdminRestaurantManagementPage,
     AdminRestaurantFullDetailsPage,
     Maps,
-    DetailPage
+    DetailPage,
+    LoginPage,
+    RegisterPage
 }
 
