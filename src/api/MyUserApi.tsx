@@ -17,6 +17,7 @@ type CurrentUserType = {
 export const useGetMyUser = () => {
   const getMyUserRequest = async () => {
     const accessToken = localStorage.getItem('everybodyeats_token');
+    
     const response = await fetch(`${API_BASE_URL}/api/auth/getLoginUser`, {
       method: "GET",
       headers: {
@@ -53,7 +54,7 @@ type CreateUserRequest = {
 export const useCreateMyUser = () => {
   const createMyUserRequest = async (user: CreateUserRequest) => {
     const accessToken = localStorage.getItem('everybodyeats_token');
-
+    
     const response = await fetch(`${API_BASE_URL}/api/my/user`, {
       method: "POST",
       headers: {
@@ -135,6 +136,7 @@ export const useUpdateMyUser = () => {
 export const useDeleteMyUser = () => {
   const deleteMyUserRequest = async (userId: string) => {
     const accessToken = localStorage.getItem('everybodyeats_token');
+    
     const response = await fetch(`${API_BASE_URL}/api/my/user/deleteUser?userId=${userId}`, {
       method: "DELETE",
       headers: {
@@ -174,7 +176,6 @@ export const useGetMyAllUsers = (page: number) => {
 
   const getMyAllUsersRequest = async (page: number) => {
     const accessToken = localStorage.getItem('everybodyeats_token');
-
     const response = await fetch(`${API_BASE_URL}/api/my/user/getAllUsers?page=${page}`, {
       method: "GET",
       headers: {

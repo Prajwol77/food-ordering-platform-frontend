@@ -1,4 +1,4 @@
-import { useAuth0 } from "@auth0/auth0-react";
+// import { useAuth0 } from "@auth0/auth0-react";
 import { useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
 import LoadingButton from "@/components/LoadingButton.tsx";
@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog.tsx";
 import UserProfileForm, {UserFormData} from "@/forms/user-profile-form/UserProfileForm.tsx";
 import { useGetMyUser } from "@/api/MyUserApi.tsx";
+import { useEffect, useState } from "react";
 
 type Props = {
   onCheckout: (userFormData: UserFormData) => void;
@@ -16,33 +17,33 @@ type Props = {
 };
 
 const CheckoutButton = ({ onCheckout, disabled }: Props) => {
-  const {
-    isAuthenticated,
-    isLoading: isAuthLoading,
-    loginWithRedirect,
-  } = useAuth0();
-
+  // const {
+  //   isAuthenticated,
+  //   isLoading: isAuthLoading,
+  //   loginWithRedirect,
+  // } = useAuth0();
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  
   const { pathname } = useLocation();
 
   const { currentUser, isLoading: isGetUserLoading } = useGetMyUser();
 
-  const onLogin = async () => {
-    await loginWithRedirect({
-      appState: {
-        returnTo: pathname,
-      },
-    });
-  };
+  useEffect(() => {
+  const token = localStorage.getItem('everybodyeats_token');
+    if(token){
+      setIsAuthenticated(true);
+    }
+  }, [pathname])
 
   if (!isAuthenticated) {
     return (
-      <Button onClick={onLogin} className="bg-orange-500 flex-1">
+      <Button onClick={() => '/login'} className="bg-orange-500 flex-1">
         Log in to checkout
       </Button>
     );
   }
 
-  if (isAuthLoading || !currentUser) {
+  if (!currentUser) {
     return <LoadingButton />;
   }
 

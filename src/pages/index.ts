@@ -1,4 +1,3 @@
-import AuthCallbackPage from "./AuthCallbackPage";
 import HomePage from "./HomePage";
 import ManageRestaurantPage from "./ManageRestaurantPage";
 import UserProfilePage from "./UserProfilePage";
@@ -12,7 +11,6 @@ import LoginPage from "./LoginPage";
 import RegisterPage from "./RegisterPage";
 
 export {
-    AuthCallbackPage,
     HomePage,
     ManageRestaurantPage,
     UserProfilePage,

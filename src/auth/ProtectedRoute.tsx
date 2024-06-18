@@ -1,29 +1,52 @@
-import { useEffect } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
+// import { useEffect, useState } from "react";
+// import { Navigate, Outlet, useNavigate } from "react-router-dom";
+// import { useGetMyUser } from "@/api/MyUserApi";
+
+// const ProtectedRoute = () => {
+//   const { currentUser, isLoading: isUserLoading } = useGetMyUser();
+//   const [isAuthenticated, setIsAuthenticated] = useState(false)
+//   useEffect(() => {
+//     debugger
+//     if (currentUser && !isUserLoading) {
+//       setIsAuthenticated(true);
+//     }
+//   }, [currentUser, isUserLoading]);
+
+
+//   if (isUserLoading) {
+//     return (
+//       <Outlet/>
+//     );
+//   }
+
+//   return isAuthenticated ? <Outlet /> : <Navigate to={'/'}/>;
+// };
+
+// export default ProtectedRoute;
+
+import { useEffect, useState } from "react";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useGetMyUser } from "@/api/MyUserApi";
 
 const ProtectedRoute = () => {
-
-  const { isAuthenticated, isLoading } = useAuth0();
   const navigate = useNavigate();
   const { currentUser, isLoading: isUserLoading } = useGetMyUser();
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   useEffect(() => {
-    if (currentUser && !isUserLoading) {
+    if (!isUserLoading && !currentUser) {
+      setIsAuthenticated(false);
       navigate('/');
     }
-  }, [isLoading, isAuthenticated, navigate, isUserLoading]);
+  }, [isUserLoading, currentUser]);
 
-
-  if (isLoading) {
-    return (
-      <Outlet/>
-    );
+  if (isUserLoading) {
+    return <Outlet />;
   }
 
-  return isAuthenticated ? <Outlet /> : <Navigate to={'/'}/>;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/" />;
 };
 
 export default ProtectedRoute;
+
 

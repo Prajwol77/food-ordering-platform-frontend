@@ -3,7 +3,6 @@ import Layout from "@/layouts/layout.tsx";
 import ProtectedRoute from "@/auth/ProtectedRoute.tsx";
 import {
   AdminPage,
-  AuthCallbackPage,
   UserProfilePage,
   HomePage,
   ManageRestaurantPage,
@@ -46,7 +45,7 @@ const AppRoutes = () => {
           </Layout>
         }
       />
-      <Route path="/auth-callback" element={<AuthCallbackPage />} />
+      {/* <Route path="/auth-callback" element={<AuthCallbackPage />} /> */}
       <Route
         path="/search/:city"
         element={
