@@ -5,21 +5,24 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { CircleUserRound } from "lucide-react";
-import { useAuth0 } from "@auth0/auth0-react";
 import { Link } from "react-router-dom";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
 import { useGetMyUser } from "@/api/MyUserApi";
 
 const UsernameMenu = () => {
-  const { user, logout } = useAuth0();
   const { currentUser } = useGetMyUser();
+
+  const logout = () => {
+    localStorage.removeItem('everybodyeats_token');
+    window.location.href = '/'
+  }
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center px-3 font-bold hover:text-orange-500 gap-2">
         <CircleUserRound className="text-orange-500" />
-        {user?.email ? `Hello👋 ${user.email.split("@")[0]}` : "Not Signed in"}
+        {currentUser?.name ? currentUser.name : currentUser?.email ? `Hello👋 ${currentUser.email.split("@")[0]}` : "Not Signed in"}
       </DropdownMenuTrigger>
       <DropdownMenuContent className="flex flex-col gap-4">
         <DropdownMenuItem>
@@ -49,7 +52,7 @@ const UsernameMenu = () => {
         <Separator />
         <DropdownMenuItem>
           <Button
-            onClick={() => logout()}
+            onClick={logout}
             className="flex flex-1 font-bold bg-orange-500 style={{width: '100px', height: '40px'}}"
           >
             Log Out

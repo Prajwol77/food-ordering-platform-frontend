@@ -3,7 +3,6 @@ import { z } from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -35,50 +34,65 @@ const LoginProfileForm = ({
   return (
     <>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSave)}
-          className="space-y-4 bg-gray-50 rounded-lg md:p-10"
-        >
-          <div>
-            <h2 className="text-2xl font-bold">{title}</h2>
-            <FormDescription>
-              View and change your profile information here.
-            </FormDescription>
-          </div>
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input {...field} className="bg-white" />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+        <div className="flex justify-center items-center min-h-screen bg-gray-100">
+          <div className="bg-white shadow-md rounded-lg p-6 md:p-8 lg:p-10 w-full max-w-sm">
+            <form onSubmit={form.handleSubmit(onSave)} className="space-y-6">
+              <div>
+                <h2 className="text-2xl font-bold text-center">{title}</h2>
+              </div>
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        className="bg-white border-gray-300 rounded-md"
+                        placeholder="Enter email"
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    className="bg-white"
-                    placeholder="Password"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit" className="bg-orange-500">
-            Login
-          </Button>
-        </form>
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        className="bg-white border-gray-300 rounded-md"
+                        placeholder="Password"
+                        type="password"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button
+                type="submit"
+                className="bg-orange-500 hover:bg-orange-600 w-full py-2 rounded-md text-white"
+              >
+                Login
+              </Button>
+            </form>
+            <div className="gap-2 flex items-center justify-center mt-4 text-sm text-gray-700">
+              <span>Don't have an account?</span>
+              <button
+                onClick={() => (window.location.href = "/register")}
+                className="text-orange-500 hover:text-orange-600 font-medium"
+              >
+                Signup
+              </button>
+            </div>
+          </div>
+        </div>
       </Form>
     </>
   );

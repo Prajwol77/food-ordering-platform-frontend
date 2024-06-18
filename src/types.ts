@@ -4,8 +4,9 @@ export type User = {
     name:string;
     address:string;
     city:string;
-    number:string;
-    auth0Id: string
+    contact:string;
+    auth0Id: string;
+    _id: string;
 };
 
 export type MenuItem = {

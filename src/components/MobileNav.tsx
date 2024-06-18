@@ -8,13 +8,23 @@ import {
 import { CircleUserRound, Menu } from "lucide-react";
 import { Separator } from "@/components/ui/separator.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { useAuth0 } from "@auth0/auth0-react";
 import MobileNavLinks from "@/components/MobileNavLinks.tsx";
 import { useNavigate } from "react-router-dom";
+import { useGetMyUser } from "@/api/MyUserApi";
 
 const MobileNav = () => {
-  const { isAuthenticated, loginWithRedirect, user } = useAuth0();
+  const { currentUser, isLoading } = useGetMyUser()
   const navigate = useNavigate();
+  let isAuthenticated = false;
+  const token = localStorage.getItem('everybodyeats_token');
+  if(token){
+    isAuthenticated = true
+  }
+
+  if(isLoading){
+    return <p>Loading...</p>
+  }
+
   return (
     <Sheet>
       <SheetTrigger>
@@ -25,7 +35,7 @@ const MobileNav = () => {
           {isAuthenticated ? (
             <span className="flex items-center font-bold gap-2">
               <CircleUserRound className="text-orange-500" />
-              {user?.email}
+              {currentUser?.email}
             </span>
           ) : (
             <span> Welcome to EveryoneEats.com!</span>
@@ -36,7 +46,6 @@ const MobileNav = () => {
           {isAuthenticated ? (
             <MobileNavLinks />
           ) : (
-            // <Button onClick={()=>loginWithRedirect()}  className="flex-1 font-bold bg-orange-500">Log In</Button>
             <Button onClick={() => navigate('/login')} className="flex-1 font-bold bg-orange-500">Log In</Button>            
           )}
         </SheetDescription>

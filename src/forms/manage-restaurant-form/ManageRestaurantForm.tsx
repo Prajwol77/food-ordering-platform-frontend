@@ -9,40 +9,42 @@ import MenuSection from "@/forms/manage-restaurant-form/MenuSection.tsx";
 import ImageSection from "@/forms/manage-restaurant-form/ImageSection.tsx";
 import LoadingButton from "@/components/LoadingButton.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import {Restaurant} from "@/types.ts";
-import {useEffect} from "react";
+import { Restaurant } from "@/types.ts";
+import { useEffect } from "react";
 
-const formSchema = z.object({
-  restaurantName: z.string({
-    required_error: "restaurant name is required",
-  }),
-  city: z.string({
-    required_error: "city name is required",
-  }),
-  // coerce function converts a string value coming from html file to a number
-  deliveryPrice: z.coerce.number({
-    required_error: "delivery price is required",
-    invalid_type_error: "must be a valid number",
-  }),
-  estimatedDeliveryTime: z.coerce.number({
-    required_error: "estimated delivery time is required",
-    invalid_type_error: "must be a valid number",
-  }),
-  cuisines: z.array(z.string()).nonempty({
-    message: "please select at least one item",
-  }),
-  menuItems: z.array(
-    z.object({
-      name: z.string().min(1, "name is required"),
-      price: z.coerce.number().min(1, "price is required"),
+const formSchema = z
+  .object({
+    restaurantName: z.string({
+      required_error: "restaurant name is required",
     }),
-  ),
-  imageUrl: z.string().optional(),
-  imageFile: z.instanceof(File, { message: "image is required" }).optional(),
-}).refine((data)=>data.imageUrl || data.imageFile, {
-  message: "Either image URL or image File must be provided",
-  path: ["imageFile"],
-});
+    city: z.string({
+      required_error: "city name is required",
+    }),
+    // coerce function converts a string value coming from html file to a number
+    deliveryPrice: z.coerce.number({
+      required_error: "delivery price is required",
+      invalid_type_error: "must be a valid number",
+    }),
+    estimatedDeliveryTime: z.coerce.number({
+      required_error: "estimated delivery time is required",
+      invalid_type_error: "must be a valid number",
+    }),
+    cuisines: z.array(z.string()).nonempty({
+      message: "please select at least one item",
+    }),
+    menuItems: z.array(
+      z.object({
+        name: z.string().min(1, "name is required"),
+        price: z.coerce.number().min(1, "price is required"),
+      })
+    ),
+    imageUrl: z.string().optional(),
+    imageFile: z.instanceof(File, { message: "image is required" }).optional(),
+  })
+  .refine((data) => data.imageUrl || data.imageFile, {
+    message: "Either image URL or image File must be provided",
+    path: ["imageFile"],
+  });
 
 type RestaurantFormData = z.infer<typeof formSchema>;
 
@@ -50,7 +52,7 @@ type Props = {
   restaurant?: Restaurant;
   onSave: (restaurantFormData: FormData) => void;
   isLoading: boolean;
- };
+};
 
 const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
   const form = useForm<RestaurantFormData>({
@@ -61,45 +63,44 @@ const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
     },
   });
 
-  useEffect(()=>{
-    console.log(restaurant);
-    
-      if(!restaurant){
-        return;
-      }
+  useEffect(() => {
+    if (!restaurant) {
+      return;
+    }
 
-      const deliveryPriceFormatted = parseInt((restaurant.deliveryPrice/100).toFixed(2));
+    const deliveryPriceFormatted = parseInt(
+      (restaurant.deliveryPrice / 100).toFixed(2)
+    );
 
-      const menuItemsFormatted = restaurant.menuItems.map((item)=>({
-        ...item,
-        price: parseInt((item.price/100).toFixed(2)),
-      }));
+    const menuItemsFormatted = restaurant.menuItems.map((item) => ({
+      ...item,
+      price: parseInt((item.price / 100).toFixed(2)),
+    }));
 
-      const updatedRestaurant = {
-        ...restaurant,
-        deliveryPrice: deliveryPriceFormatted,
-        menuItems: menuItemsFormatted,
-      };
+    const updatedRestaurant = {
+      ...restaurant,
+      deliveryPrice: deliveryPriceFormatted,
+      menuItems: menuItemsFormatted,
+    };
 
-      form.reset(updatedRestaurant)
-
-  },[form, restaurant])
+    form.reset(updatedRestaurant);
+  }, [form, restaurant]);
 
   const onSubmit = (formDataJson: RestaurantFormData) => {
-    // TODO - convert formDataJson to a new FormData object
+    debugger;
+    //? TODO - convert formDataJson to a new FormData object
     const formData = new FormData();
-
 
     formData.append("restaurantName", formDataJson.restaurantName);
     formData.append("city", formDataJson.city);
 
     formData.append(
       "deliveryPrice",
-      (formDataJson.deliveryPrice * 100).toString(),
+      (formDataJson.deliveryPrice * 100).toString()
     );
     formData.append(
       "estimatedDeliveryTime",
-      formDataJson.estimatedDeliveryTime.toString(),
+      formDataJson.estimatedDeliveryTime.toString()
     );
 
     formDataJson.cuisines.forEach((cuisine, index) => {
@@ -109,15 +110,13 @@ const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
       formData.append(`menuItems[${index}][name]`, menuItem.name);
       formData.append(
         `menuItems[${index}][price]`,
-        (menuItem.price * 100).toString(),
+        (menuItem.price * 100).toString()
       );
     });
 
-    if(formDataJson.imageFile){
+    if (formDataJson.imageFile) {
       formData.append(`imageFile`, formDataJson.imageFile);
     }
-
-
 
     onSave(formData);
   };
@@ -143,5 +142,3 @@ const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
 };
 
 export default ManageRestaurantForm;
-
-

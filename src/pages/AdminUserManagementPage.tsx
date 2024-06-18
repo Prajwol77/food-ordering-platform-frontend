@@ -31,7 +31,7 @@ const AdminUserManagementPage = () => {
     try {
       await deleteUser(userId);
       setUsers((prevUsers) =>
-        prevUsers.filter((user) => user.auth0Id !== userId)
+        prevUsers.filter((user) => user._id !== userId)
       );
     } catch (err) {
       console.error("Failed to delete user:", err);
@@ -39,17 +39,26 @@ const AdminUserManagementPage = () => {
   };
 
   const handleAdminManagement = async (userId: string) => {
+    setUsers((prevUsers) =>
+      prevUsers.map((user) =>
+        user._id === userId ? { ...user, isAdmin: !user.isAdmin } : user
+      )
+    );
     try {
       await adminUser(userId);
+      if(currentUser?._id === userId){
+        window.location.href = '/'
+      }
+    } catch (error) {
+      console.error("Failed to change admin status:", error);
       setUsers((prevUsers) =>
         prevUsers.map((user) =>
-          user.auth0Id === userId ? { ...user, isAdmin: !user.isAdmin } : user
+          user._id === userId ? { ...user, isAdmin: !user.isAdmin } : user
         )
       );
-    } catch (error) {
-      console.error("Failed to delete user:", error);
     }
   };
+  
 
   useEffect(() => {
     if (allUsers) {
@@ -104,18 +113,18 @@ const AdminUserManagementPage = () => {
                     {user.city}
                   </td>
                   <td className="py-2 px-4 border-b border-gray-200">
-                    {user.number}
+                    {user.contact}
                   </td>
                   <td className="py-2 px-4 border-b border-gray-200">
                     <Button
-                      onClick={() => handleDelete(user.auth0Id)}
+                      onClick={() => handleDelete(user._id)}
                       className="mr-2 bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700"
-                      disabled={user.auth0Id === currentUser.auth0Id}
+                      disabled={user._id === currentUser?._id}
                     >
                       Delete User
                     </Button>
                     <Button
-                      onClick={() => handleAdminManagement(user.auth0Id)}
+                      onClick={() => handleAdminManagement(user._id)}
                       className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700"
                     >
                       {user.isAdmin ? "Remove Admin" : "Make Admin"}

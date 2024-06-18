@@ -1,5 +1,4 @@
 import { useMutation, useQuery } from "react-query";
-import { useAuth0 } from "@auth0/auth0-react";
 import { toast } from "sonner";
 import { User } from "@/types";
 
@@ -10,13 +9,15 @@ type AllUserDataType = {
   total: number;
 };
 
+type CurrentUserType = {
+  isSuccess: boolean;
+  user: User;
+}
+
 export const useGetMyUser = () => {
-  const { getAccessTokenSilently } = useAuth0();
-
   const getMyUserRequest = async () => {
-    const accessToken = await getAccessTokenSilently();
-
-    const response = await fetch(`${API_BASE_URL}/api/my/user`, {
+    const accessToken = localStorage.getItem('everybodyeats_token');
+    const response = await fetch(`${API_BASE_URL}/api/auth/getLoginUser`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -27,8 +28,8 @@ export const useGetMyUser = () => {
     if (!response.ok) {
       throw new Error("Failed to fetch user");
     }
-
-    return response.json();
+    const data: CurrentUserType = await response.json();
+    return data.user;
   };
 
   const {
@@ -50,10 +51,9 @@ type CreateUserRequest = {
 };
 
 export const useCreateMyUser = () => {
-  const { getAccessTokenSilently } = useAuth0();
-
   const createMyUserRequest = async (user: CreateUserRequest) => {
-    const accessToken = await getAccessTokenSilently();
+    const accessToken = localStorage.getItem('everybodyeats_token');
+
     const response = await fetch(`${API_BASE_URL}/api/my/user`, {
       method: "POST",
       headers: {
@@ -93,10 +93,9 @@ type UpdateMyUserRequest = {
 };
 
 export const useUpdateMyUser = () => {
-  const { getAccessTokenSilently } = useAuth0();
 
   const updateMyUserRequest = async (formData: UpdateMyUserRequest) => {
-    const accessToken = await getAccessTokenSilently();
+    const accessToken = localStorage.getItem('everybodyeats_token');
     const response = await fetch(`${API_BASE_URL}/api/my/user`, {
       method: "PUT",
       headers: {
@@ -134,9 +133,8 @@ export const useUpdateMyUser = () => {
 };
 
 export const useDeleteMyUser = () => {
-  const { getAccessTokenSilently } = useAuth0();
   const deleteMyUserRequest = async (userId: string) => {
-    const accessToken = await getAccessTokenSilently();
+    const accessToken = localStorage.getItem('everybodyeats_token');
     const response = await fetch(`${API_BASE_URL}/api/my/user/deleteUser?userId=${userId}`, {
       method: "DELETE",
       headers: {
@@ -173,10 +171,9 @@ export const useDeleteMyUser = () => {
 };
 
 export const useGetMyAllUsers = (page: number) => {
-  const { getAccessTokenSilently } = useAuth0();
 
   const getMyAllUsersRequest = async (page: number) => {
-    const accessToken = await getAccessTokenSilently();
+    const accessToken = localStorage.getItem('everybodyeats_token');
 
     const response = await fetch(`${API_BASE_URL}/api/my/user/getAllUsers?page=${page}`, {
       method: "GET",
@@ -209,11 +206,9 @@ export const useGetMyAllUsers = (page: number) => {
   return { allUsers, isLoading };
 };
 
-
 export const useMakeMyUserAdmin = () => {
-  const { getAccessTokenSilently } = useAuth0();
   const makeMyUserAdminRequest = async (userId: string) => {
-    const accessToken = await getAccessTokenSilently();
+    const accessToken = localStorage.getItem('everybodyeats_token');
     const response = await fetch(`${API_BASE_URL}/api/my/user/makeUserAdmin?userId=${userId}`, {
       method: "PUT",
       headers: {

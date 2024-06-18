@@ -33,7 +33,7 @@ const AppRoutes = () => {
       <Route
         path="/login"
         element={
-          <Layout>
+          <Layout auth={true}>
             <LoginPage />
           </Layout>
         }
@@ -41,7 +41,7 @@ const AppRoutes = () => {
       <Route
         path="/register"
         element={
-          <Layout>
+          <Layout auth={true}>
             <RegisterPage />
           </Layout>
         }

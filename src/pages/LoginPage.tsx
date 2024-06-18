@@ -4,16 +4,13 @@ import LoginProfileForm from "@/forms/auth-form/LoginProfileForm";
 const LoginPage = () => {
   const { loginUser, isLoading } = useLoginUser();
 
-  if(isLoading){
-    return <p>Loading...</p>
+  if (isLoading) {
+    return <p>Loading...</p>;
   }
 
   return (
     <>
-      <LoginProfileForm 
-      title="Login"
-      onSave={loginUser}
-      />
+      <LoginProfileForm title="Login" onSave={loginUser} />
     </>
   );
 };
