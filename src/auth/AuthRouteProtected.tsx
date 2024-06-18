@@ -13,7 +13,6 @@ const AuthRouteProtected: React.FC<Props> = ({ children }) => {
     const token = localStorage.getItem("everybodyeats_token");
     if (token) {
       try {
-        debugger
         const decodedToken: { exp: number } = jwtDecode(token);
         if (decodedToken.exp * 1000 < Date.now()) {
           localStorage.removeItem("everybodyeats_token");
