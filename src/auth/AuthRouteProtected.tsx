@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
 interface Props {
@@ -8,8 +8,14 @@ interface Props {
 
 const AuthRouteProtected: React.FC<Props> = ({ children }) => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   useEffect(() => {
+
+    if(pathname === '/login' || pathname === '/register'){
+      return;
+    }
+
     const token = localStorage.getItem("everybodyeats_token");
     if (token) {
       try {
@@ -25,7 +31,7 @@ const AuthRouteProtected: React.FC<Props> = ({ children }) => {
     } else {
       navigate("/login");
     }
-  }, [navigate]);
+  }, [navigate, pathname]);
 
   return <>{children}</>;
 };

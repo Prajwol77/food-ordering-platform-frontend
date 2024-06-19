@@ -17,7 +17,9 @@ type CurrentUserType = {
 export const useGetMyUser = () => {
   const getMyUserRequest = async () => {
     const accessToken = localStorage.getItem('everybodyeats_token');
-    
+    if(!accessToken){
+      return;
+    }
     const response = await fetch(`${API_BASE_URL}/api/auth/getLoginUser`, {
       method: "GET",
       headers: {
