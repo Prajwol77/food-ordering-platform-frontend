@@ -3,16 +3,16 @@ import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useGetMyUser } from "@/api/MyUserApi";
 
 const ProtectedRoute = () => {
-  const navigate = useNavigate();
   const { currentUser, isLoading: isUserLoading } = useGetMyUser();
+  const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   useEffect(() => {
     if (!isUserLoading && !currentUser) {
       setIsAuthenticated(false);
-      navigate('/');
+      navigate("/", { replace: true });
     }
-  }, [isUserLoading, currentUser]);
+  }, [isUserLoading, currentUser, navigate]);
 
   if (isUserLoading) {
     return <Outlet />;
@@ -22,5 +22,3 @@ const ProtectedRoute = () => {
 };
 
 export default ProtectedRoute;
-
-

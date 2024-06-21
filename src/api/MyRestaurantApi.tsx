@@ -332,16 +332,10 @@ export const useGetAllCommentForRestaurant = (
   limit: number
 ) => {
   const fetchComments = async () => {
-    const accessToken = localStorage.getItem("everybodyeats_token");
-
     const response = await fetch(
       `${API_BASE_URL}/api/my/restaurant/getCommentForRestaurant?restaurantID=${restaurantID}&page=${page}&limit=${limit}`,
       {
         method: "GET",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
       }
     );
 

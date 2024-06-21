@@ -155,9 +155,10 @@ const DetailPage = () => {
               />
             </CardFooter>
           </Card>
+
           <UpdateRating
             restaurantID={restaurant._id}
-            userId={currentUser._id}
+            userId={currentUser?._id}
           />
         </div>
         <CommentSection restaurantID={restaurant._id} />

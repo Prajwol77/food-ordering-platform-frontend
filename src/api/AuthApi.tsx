@@ -1,4 +1,5 @@
 import { useMutation } from "react-query";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -14,6 +15,8 @@ export type RegisterUserType = {
 }
 
 export const useLoginUser = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const loginUserRequest = async (formData: LoginUserRequest) => {
     const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
       method: "POST",
@@ -30,7 +33,8 @@ export const useLoginUser = () => {
     const data = await response.json();
     if (data.isSuccess) {
       localStorage.setItem("everybodyeats_token", data.token);
-      window.location.href = "/";
+      const from = location.state?.from || "/";
+      return navigate(from, { replace: true });
     }
     return data;
   };

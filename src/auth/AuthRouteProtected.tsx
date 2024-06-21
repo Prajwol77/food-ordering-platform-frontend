@@ -11,8 +11,13 @@ const AuthRouteProtected: React.FC<Props> = ({ children }) => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-
-    if(pathname === '/login' || pathname === '/register'){
+    if (
+      pathname === "/login" ||
+      pathname === "/register" ||
+      pathname === "/" ||
+      pathname.startsWith("/search/") ||
+      pathname.startsWith("/detail/restaurant/")
+    ) {
       return;
     }
 
@@ -22,14 +27,14 @@ const AuthRouteProtected: React.FC<Props> = ({ children }) => {
         const decodedToken: { exp: number } = jwtDecode(token);
         if (decodedToken.exp * 1000 < Date.now()) {
           localStorage.removeItem("everybodyeats_token");
-          navigate("/login");
+          navigate("/login", { state: { from: pathname } });
         }
       } catch (error) {
         localStorage.removeItem("everybodyeats_token");
-        navigate("/login");
+        navigate("/login", { state: { from: pathname } });
       }
     } else {
-      navigate("/login");
+      navigate("/login", { state: { from: pathname } });
     }
   }, [navigate, pathname]);
 

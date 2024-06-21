@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { useUpdateRestaurantRating } from "@/api/MyRestaurantApi";
 import { StarFilledIcon, StarIcon } from "@radix-ui/react-icons";
+import { toast } from "sonner";
 
 const UpdateRating = ({
   restaurantID,
   userId,
 }: {
   restaurantID: string;
-  userId: string;
+  userId: string | undefined;
 }) => {
   const [reviewStars, setReviewStars] = useState<number | null>(null);
   const [comment, setComment] = useState("");
@@ -18,6 +19,10 @@ const UpdateRating = ({
   };
 
   const handleUpdateRating = () => {
+    if(!userId){
+      toast.warning("Please login to comment")
+      return;
+    }
     updateRestaurantRating({ reviewStars, restaurantID, userId, comment });
   };
 
