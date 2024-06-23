@@ -24,8 +24,10 @@ export type LoginUserFormData = z.infer<typeof formSchema>;
 
 const RegisterUserForm = ({
   onSave,
+  loading
 }: {
   onSave: (registerData: RegisterUserType) => void;
+  loading?: boolean
 }) => {
   const form = useForm<LoginUserFormData>({
     resolver: zodResolver(formSchema),
@@ -97,6 +99,7 @@ const RegisterUserForm = ({
               <Button
                 type="submit"
                 className="bg-orange-500 hover:bg-orange-600 w-full py-2 rounded-md text-white"
+                disabled={loading}
               >
                 Register
               </Button>
@@ -106,6 +109,7 @@ const RegisterUserForm = ({
               <button
                 onClick={() => (window.location.href = "/login")}
                 className="text-orange-500 hover:text-orange-600 font-medium ml-1"
+                disabled={loading}
               >
                 Login
               </button>

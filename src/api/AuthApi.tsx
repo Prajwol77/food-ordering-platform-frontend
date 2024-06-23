@@ -35,7 +35,7 @@ export const useLoginUser = () => {
       localStorage.setItem("everybodyeats_token", data.token);
       const from = location.state?.from || "/";
       return navigate(from, { replace: true });
-    }
+    } 
     return data;
   };
 
