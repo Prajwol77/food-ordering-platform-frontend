@@ -1,5 +1,5 @@
 // import { useAuth0 } from "@auth0/auth0-react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import LoadingButton from "@/components/LoadingButton.tsx";
 import {
@@ -26,6 +26,8 @@ const CheckoutButton = ({ onCheckout, disabled }: Props) => {
   
   const { pathname } = useLocation();
 
+  const navigate = useNavigate();
+
   const { currentUser, isLoading: isGetUserLoading } = useGetMyUser();
 
   useEffect(() => {
@@ -37,7 +39,7 @@ const CheckoutButton = ({ onCheckout, disabled }: Props) => {
 
   if (!isAuthenticated) {
     return (
-      <Button onClick={() => '/login'} className="bg-orange-500 flex-1">
+      <Button onClick={() => navigate('/login')} className="bg-orange-500 flex-1">
         Log in to checkout
       </Button>
     );
