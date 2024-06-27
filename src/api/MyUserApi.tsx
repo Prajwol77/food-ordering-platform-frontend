@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";
 import { User } from "@/types";
+import isTokenValid from "@/lib/checkToken";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -12,12 +13,12 @@ type AllUserDataType = {
 type CurrentUserType = {
   isSuccess: boolean;
   user: User;
-}
+};
 
 export const useGetMyUser = () => {
   const getMyUserRequest = async () => {
-    const accessToken = localStorage.getItem('everybodyeats_token');
-    if(!accessToken){
+    const accessToken = localStorage.getItem("everybodyeats_token");
+    if (!accessToken) {
       return;
     }
     const response = await fetch(`${API_BASE_URL}/api/auth/getLoginUser`, {
@@ -55,8 +56,10 @@ type CreateUserRequest = {
 
 export const useCreateMyUser = () => {
   const createMyUserRequest = async (user: CreateUserRequest) => {
-    const accessToken = localStorage.getItem('everybodyeats_token');
-    
+    const accessToken = localStorage.getItem("everybodyeats_token");
+    if (!isTokenValid) {
+      return;
+    }
     const response = await fetch(`${API_BASE_URL}/api/my/user`, {
       method: "POST",
       headers: {
@@ -71,7 +74,6 @@ export const useCreateMyUser = () => {
     }
 
     return response.json();
-
   };
   const {
     mutateAsync: createUser,
@@ -96,9 +98,8 @@ type UpdateMyUserRequest = {
 };
 
 export const useUpdateMyUser = () => {
-
   const updateMyUserRequest = async (formData: UpdateMyUserRequest) => {
-    const accessToken = localStorage.getItem('everybodyeats_token');
+    const accessToken = localStorage.getItem("everybodyeats_token");
     const response = await fetch(`${API_BASE_URL}/api/my/user`, {
       method: "PUT",
       headers: {
@@ -137,15 +138,18 @@ export const useUpdateMyUser = () => {
 
 export const useDeleteMyUser = () => {
   const deleteMyUserRequest = async (userId: string) => {
-    const accessToken = localStorage.getItem('everybodyeats_token');
-    
-    const response = await fetch(`${API_BASE_URL}/api/my/user/deleteUser?userId=${userId}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
+    const accessToken = localStorage.getItem("everybodyeats_token");
+
+    const response = await fetch(
+      `${API_BASE_URL}/api/my/user/deleteUser?userId=${userId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
       }
-    });
+    );
 
     if (!response.ok) {
       throw new Error("Failed to delete user");
@@ -175,16 +179,18 @@ export const useDeleteMyUser = () => {
 };
 
 export const useGetMyAllUsers = (page: number) => {
-
   const getMyAllUsersRequest = async (page: number) => {
-    const accessToken = localStorage.getItem('everybodyeats_token');
-    const response = await fetch(`${API_BASE_URL}/api/my/user/getAllUsers?page=${page}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-    });
+    const accessToken = localStorage.getItem("everybodyeats_token");
+    const response = await fetch(
+      `${API_BASE_URL}/api/my/user/getAllUsers?page=${page}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to fetch user");
@@ -197,10 +203,13 @@ export const useGetMyAllUsers = (page: number) => {
     data: allUsers,
     isLoading,
     error,
-  } = useQuery<AllUserDataType, Error>(['fetchAllUsers', page], () => getMyAllUsersRequest(page), {
-    keepPreviousData: true,
-  });
-
+  } = useQuery<AllUserDataType, Error>(
+    ["fetchAllUsers", page],
+    () => getMyAllUsersRequest(page),
+    {
+      keepPreviousData: true,
+    }
+  );
 
   if (error) {
     toast.error(error.toString());
@@ -211,14 +220,17 @@ export const useGetMyAllUsers = (page: number) => {
 
 export const useMakeMyUserAdmin = () => {
   const makeMyUserAdminRequest = async (userId: string) => {
-    const accessToken = localStorage.getItem('everybodyeats_token');
-    const response = await fetch(`${API_BASE_URL}/api/my/user/makeUserAdmin?userId=${userId}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
+    const accessToken = localStorage.getItem("everybodyeats_token");
+    const response = await fetch(
+      `${API_BASE_URL}/api/my/user/makeUserAdmin?userId=${userId}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
       }
-    });
+    );
 
     if (!response.ok) {
       throw new Error("Failed to update user");

@@ -12,6 +12,7 @@ import { UserFormData } from "@/forms/user-profile-form/UserProfileForm.tsx";
 import { StarFilledIcon, StarIcon } from "@radix-ui/react-icons";
 import { CommentSection, UpdateRating } from "@/components";
 import { useGetMyUser } from "@/api/MyUserApi";
+import { CheckoutSessionRequest, useCheckOutSession } from "@/api/OrderApi";
 
 export type CartItem = {
   id: string;
@@ -25,6 +26,7 @@ const DetailPage = () => {
   const { restaurant, isLoading } = useGetRestaurant(restaurantId);
   const [totalStar, setTotalStar] = useState(0);
   const { currentUser, isLoading: isCurrentUserLoading } = useGetMyUser();
+  const { checkoutSession, isLoading: isCheckoutSessionLoading } = useCheckOutSession();
 
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
@@ -97,7 +99,19 @@ const DetailPage = () => {
 
   const onCheckout = (userFormData: UserFormData) => {
     console.log("userFormData", userFormData);
+    const checkOutRequestData: CheckoutSessionRequest = {
+      cartItems: cartItems,
+      deliveryDetails: {
+        email: userFormData.email as string,
+        name: userFormData.name,
+        address: userFormData.address,
+        city: userFormData.city,
+      },
+      restaurantId: restaurantId as string,
+    };
+    checkoutSession(checkOutRequestData);
   };
+  
 
   useEffect(() => {
     if (restaurant) {
@@ -150,7 +164,7 @@ const DetailPage = () => {
             />
             <CardFooter>
               <CheckoutButton
-                disabled={cartItems.length === 0}
+                disabled={cartItems.length === 0 || isCheckoutSessionLoading}
                 onCheckout={onCheckout}
               />
             </CardFooter>

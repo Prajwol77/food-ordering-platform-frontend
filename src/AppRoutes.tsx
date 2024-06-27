@@ -62,6 +62,15 @@ const AppRoutes = () => {
         }
       />
 
+      <Route
+        path="/detail/restaurant/:restaurantId?cancelled=true"
+        element={
+          <Layout showHero={false}>
+            <DetailPage />
+          </Layout>
+        }
+      />
+
       <Route element={<ProtectedRoute />}>
         <Route
           path="/user-profile"
