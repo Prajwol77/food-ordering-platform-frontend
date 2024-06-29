@@ -1,4 +1,4 @@
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 
 export default function isTokenValid(): boolean {
   const token = localStorage.getItem("everybodyeats_token");

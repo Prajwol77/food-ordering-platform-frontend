@@ -143,7 +143,7 @@ export const useGetMyAllRestaurant = (page: number) => {
     );
 
     if (!response.ok) {
-      throw new Error("Failed to fetch user");
+      throw new Error("Failed to get the restaurants");
     }
     const data: AllRestaurantDataType = await response.json();
     return data;
@@ -184,7 +184,7 @@ export const useGetRestaurantByID = (id: string) => {
     );
 
     if (!response.ok) {
-      throw new Error("Failed to fetch user");
+      throw new Error("Failed to get the restaurant");
     }
     const data = await response.json();
     return data;
@@ -261,7 +261,7 @@ export const useGetAllUsersAndRestaurant = () => {
     );
 
     if (!response.ok) {
-      throw new Error("Failed to fetch user");
+      throw new Error("Failed to get the users and restaurants details");
     }
     const data = await response.json();
     return data;

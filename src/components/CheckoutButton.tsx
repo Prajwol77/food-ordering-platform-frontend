@@ -16,9 +16,10 @@ import { useEffect, useState } from "react";
 type Props = {
   onCheckout: (userFormData: UserFormData) => void;
   disabled: boolean;
+  restaurantName: string;
 };
 
-const CheckoutButton = ({ onCheckout, disabled }: Props) => {
+const CheckoutButton = ({ onCheckout, disabled, restaurantName }: Props) => {
   // const {
   //   isAuthenticated,
   //   isLoading: isAuthLoading,
@@ -63,6 +64,7 @@ const CheckoutButton = ({ onCheckout, disabled }: Props) => {
       </DialogTrigger>
       <DialogContent className="max-2-[425px] md:min-w-[700px] bg-gray-50">
         <UserProfileForm
+          restaurantName={restaurantName}
           currentUser={currentUser}
           onSave={onCheckout}
           isLoading={isGetUserLoading}

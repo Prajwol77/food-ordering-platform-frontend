@@ -164,6 +164,7 @@ const DetailPage = () => {
             />
             <CardFooter>
               <CheckoutButton
+                restaurantName={restaurant.city}
                 disabled={cartItems.length === 0 || isCheckoutSessionLoading}
                 onCheckout={onCheckout}
               />

@@ -1,10 +1,11 @@
+import isTokenValid from "@/lib/checkToken";
 import { Button } from "./ui/button";
 import UsernameMenu from "@/components/UsernameMenu.tsx";
 
 const MainNav = () => {
   let isAuthenticated = false;
-  const token = localStorage.getItem('everybodyeats_token');
-  if(token){
+  const isAccess = isTokenValid();
+  if(isAccess){
     isAuthenticated = true
   }
 

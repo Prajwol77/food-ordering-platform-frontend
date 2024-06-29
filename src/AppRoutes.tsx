@@ -100,7 +100,7 @@ const AppRoutes = () => {
         />
 
         <Route
-          path="/maps"
+          path="/maps/restaurant/:restaurant"
           element={
             <Layout>
               <Maps />

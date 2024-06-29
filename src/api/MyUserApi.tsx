@@ -18,7 +18,7 @@ type CurrentUserType = {
 export const useGetMyUser = () => {
   const getMyUserRequest = async () => {
     const accessToken = localStorage.getItem("everybodyeats_token");
-    if (!accessToken) {
+    if (!isTokenValid()) {
       return;
     }
     const response = await fetch(`${API_BASE_URL}/api/auth/getLoginUser`, {
@@ -57,7 +57,7 @@ type CreateUserRequest = {
 export const useCreateMyUser = () => {
   const createMyUserRequest = async (user: CreateUserRequest) => {
     const accessToken = localStorage.getItem("everybodyeats_token");
-    if (!isTokenValid) {
+    if (!isTokenValid()) {
       return;
     }
     const response = await fetch(`${API_BASE_URL}/api/my/user`, {
@@ -193,7 +193,7 @@ export const useGetMyAllUsers = (page: number) => {
     );
 
     if (!response.ok) {
-      throw new Error("Failed to fetch user");
+      throw new Error("Failed to fetch all users");
     }
     const data: AllUserDataType = await response.json();
     return data;

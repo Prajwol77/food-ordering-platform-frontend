@@ -37,10 +37,10 @@ export const useCheckOutSession = () => {
     );
 
     if (!response.ok) {
-      throw new Error("Failed to fetch user");
+      throw new Error("Failed to create stripe session");
     }
     const data = await response.json();
-    window.location.href = data.url;
+    window.open(data.url, '_blank')
     console.log("data-checkout-session", data);
     return data;
   };

@@ -9,6 +9,7 @@ import Maps from "./Maps";
 import DetailPage from "./DetailPage";
 import LoginPage from "./LoginPage";
 import RegisterPage from "./RegisterPage";
+import Maps_v2 from "./Maps_v2";
 
 export {
     HomePage,
@@ -21,6 +22,7 @@ export {
     Maps,
     DetailPage,
     LoginPage,
-    RegisterPage
+    RegisterPage,
+    Maps_v2
 }
 
