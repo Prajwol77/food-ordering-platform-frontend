@@ -15,7 +15,6 @@ import LoadingButton from "@/components/LoadingButton.tsx";
 import { Button } from "@/components/ui/button";
 import { User } from "@/types.ts";
 import { useEffect } from "react";
-import { Maps_v2 } from "@/pages";
 
 const formSchema = z.object({
   email: z.string().optional(),
@@ -54,10 +53,9 @@ const UserProfileForm = ({
   });
 
   const openMap = () => {
-    debugger
     const url = `/maps/restaurant/${encodeURIComponent(restaurantName)}`;
-    window.open(url, '_blank');
-  }
+    window.open(url, "_blank");
+  };
 
   useEffect(() => {
     form.reset(currentUser);
@@ -163,10 +161,13 @@ const UserProfileForm = ({
               {buttonText}
             </Button>
           )}
-          {restaurantName && <Button type='button' onClick={openMap}>Open Map</Button>}
+          {restaurantName && (
+            <Button type="button" onClick={openMap} className="bg-zinc-500 m-2">
+              Open Map
+            </Button>
+          )}
         </form>
       </Form>
-      
     </>
   );
 };
