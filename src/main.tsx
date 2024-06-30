@@ -5,7 +5,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import AppRoutes from "@/AppRoutes.tsx";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Toaster } from "sonner";
-// import AuthRouteProtected from "./auth/AuthRouteProtected";
+import AuthRouteProtected from "./auth/AuthRouteProtected";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,10 +19,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Router>
       <QueryClientProvider client={queryClient}>
-        {/* <AuthRouteProtected> */}
-        <AppRoutes />
-        <Toaster visibleToasts={1} position="top-right" richColors />
-        {/* </AuthRouteProtected> */}
+        <AuthRouteProtected>
+          <AppRoutes />
+          <Toaster visibleToasts={1} position="top-right" richColors />
+        </AuthRouteProtected>
       </QueryClientProvider>
     </Router>
   </React.StrictMode>
