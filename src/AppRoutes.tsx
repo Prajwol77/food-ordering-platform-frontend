@@ -13,11 +13,11 @@ import {
   Maps,
   LoginPage,
   RegisterPage,
+  StaticPage,
 } from "./pages";
 import AdminLayout from "./layouts/AdminLayout";
 import SearchPage from "@/pages/SearchPage.tsx";
 import AdminProtectedRoute from "./auth/AdminProtectedRoute";
-import TestingPage from "./pages/testingPage";
 
 const AppRoutes = () => {
   return (
@@ -42,7 +42,7 @@ const AppRoutes = () => {
         path="/testing"
         element={
           <Layout auth={true}>
-            <TestingPage />
+            <StaticPage />
           </Layout>
         }
       />
