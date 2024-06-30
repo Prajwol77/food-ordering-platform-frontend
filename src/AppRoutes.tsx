@@ -13,7 +13,6 @@ import {
   Maps,
   LoginPage,
   RegisterPage,
-  StaticPage,
 } from "./pages";
 import AdminLayout from "./layouts/AdminLayout";
 import SearchPage from "@/pages/SearchPage.tsx";
@@ -35,14 +34,6 @@ const AppRoutes = () => {
         element={
           <Layout auth={true}>
             <LoginPage />
-          </Layout>
-        }
-      />
-      <Route
-        path="/testing"
-        element={
-          <Layout auth={true}>
-            <StaticPage />
           </Layout>
         }
       />

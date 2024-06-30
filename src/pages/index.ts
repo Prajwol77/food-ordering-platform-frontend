@@ -10,7 +10,6 @@ import DetailPage from "./DetailPage";
 import LoginPage from "./LoginPage";
 import RegisterPage from "./RegisterPage";
 import Maps_v2 from "./Maps_v2";
-import StaticPage from "./StaticPage";
 
 export {
   HomePage,
@@ -25,5 +24,4 @@ export {
   LoginPage,
   RegisterPage,
   Maps_v2,
-  StaticPage,
 };

@@ -11,7 +11,6 @@ const AuthRouteProtected: React.FC<Props> = ({ children }) => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    alert(pathname);
     if (
       pathname === "/login" ||
       pathname === "/register" ||
