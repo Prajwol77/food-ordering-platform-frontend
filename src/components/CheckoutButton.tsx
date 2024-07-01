@@ -1,4 +1,3 @@
-// import { useAuth0 } from "@auth0/auth0-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import LoadingButton from "@/components/LoadingButton.tsx";
@@ -12,6 +11,7 @@ import UserProfileForm, {
 } from "@/forms/user-profile-form/UserProfileForm.tsx";
 import { useGetMyUser } from "@/api/MyUserApi.tsx";
 import { useEffect, useState } from "react";
+import isTokenValid from "@/lib/checkToken";
 
 type Props = {
   onCheckout: (userFormData: UserFormData) => void;
@@ -20,11 +20,6 @@ type Props = {
 };
 
 const CheckoutButton = ({ onCheckout, disabled, restaurantName }: Props) => {
-  // const {
-  //   isAuthenticated,
-  //   isLoading: isAuthLoading,
-  //   loginWithRedirect,
-  // } = useAuth0();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const { pathname } = useLocation();
@@ -34,7 +29,7 @@ const CheckoutButton = ({ onCheckout, disabled, restaurantName }: Props) => {
   const { currentUser, isLoading: isGetUserLoading } = useGetMyUser();
 
   useEffect(() => {
-    const token = localStorage.getItem("everybodyeats_token");
+    const token = isTokenValid();
     if (token) {
       setIsAuthenticated(true);
     }

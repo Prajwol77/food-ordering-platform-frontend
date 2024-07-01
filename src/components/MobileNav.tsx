@@ -11,12 +11,13 @@ import { Button } from "@/components/ui/button.tsx";
 import MobileNavLinks from "@/components/MobileNavLinks.tsx";
 import { useNavigate } from "react-router-dom";
 import { useGetMyUser } from "@/api/MyUserApi";
+import isTokenValid from "@/lib/checkToken";
 
 const MobileNav = () => {
   const { currentUser, isLoading } = useGetMyUser()
   const navigate = useNavigate();
   let isAuthenticated = false;
-  const token = localStorage.getItem('everybodyeats_token');
+  const token = isTokenValid();
   if(token){
     isAuthenticated = true
   }
