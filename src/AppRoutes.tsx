@@ -12,7 +12,7 @@ import {
   DetailPage,
   Maps,
   LoginPage,
-  RegisterPage
+  RegisterPage,
 } from "./pages";
 import AdminLayout from "./layouts/AdminLayout";
 import SearchPage from "@/pages/SearchPage.tsx";

@@ -12,17 +12,16 @@ import RegisterPage from "./RegisterPage";
 import Maps_v2 from "./Maps_v2";
 
 export {
-    HomePage,
-    ManageRestaurantPage,
-    UserProfilePage,
-    AdminPage,
-    AdminUserManagementPage,
-    AdminRestaurantManagementPage,
-    AdminRestaurantFullDetailsPage,
-    Maps,
-    DetailPage,
-    LoginPage,
-    RegisterPage,
-    Maps_v2
-}
-
+  HomePage,
+  ManageRestaurantPage,
+  UserProfilePage,
+  AdminPage,
+  AdminUserManagementPage,
+  AdminRestaurantManagementPage,
+  AdminRestaurantFullDetailsPage,
+  Maps,
+  DetailPage,
+  LoginPage,
+  RegisterPage,
+  Maps_v2,
+};
