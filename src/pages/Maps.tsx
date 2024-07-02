@@ -124,7 +124,7 @@ const Maps_v2 = () => {
 
       initializeMap();
     }
-  }, [map, restaurantLocation]);
+  }, [restaurantLocation]);
 
   const handleSearch = async () => {
     try {
