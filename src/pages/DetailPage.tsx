@@ -120,7 +120,7 @@ const DetailPage = () => {
   }, [restaurant, isLoading]);
 
   if (isLoading || !restaurant || isCurrentUserLoading) {
-    return "Loading...";
+    return <div>Loading...</div>;
   }
 
   return (
@@ -176,7 +176,7 @@ const DetailPage = () => {
             userId={currentUser?._id}
           />
         </div>
-        <CommentSection restaurantID={restaurant._id} />
+        <CommentSection restaurantID={restaurant._id} userID={currentUser?._id}/>
       </div>
     </div>
   );

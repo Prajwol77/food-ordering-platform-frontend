@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";
 import { CommentSectionType, Restaurant } from "@/types.ts";
+import isTokenValid from "@/lib/checkToken";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -21,9 +22,21 @@ type UpdateReviewType = {
   comment: string;
 };
 
+type UpdateReviewByIdType = {
+  reviewStars: number | null;
+  restaurantID: string;
+  comment: string;
+  ratingID: string;
+};
+
 type CommentForRestaurantType = {
   data: CommentSectionType[];
   count: number;
+};
+
+type UpdateRestaurantRatingByIdResponse = {
+  isSuccess: boolean;
+  rating: CommentSectionType;
 };
 
 export const useGetMyRestaurant = () => {
@@ -351,4 +364,101 @@ export const useGetAllCommentForRestaurant = (
       toast.error(error?.toString());
     },
   });
+};
+
+export const useUpdateRestaurantRatingById = () => {
+  const getUpdateRestaurantRatingByIdRequest = async ({
+    reviewStars,
+    restaurantID,
+    comment,
+    ratingID,
+  }: UpdateReviewByIdType): Promise<UpdateRestaurantRatingByIdResponse | null> => {
+    const accessToken = localStorage.getItem("everybodyeats_token");
+
+    if (!isTokenValid()) {
+      return null;
+    }
+
+    const response = await fetch(
+      `${API_BASE_URL}/api/my/restaurant/updateRatingById`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ reviewStars, restaurantID, ratingID, comment }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to update rating");
+    }
+
+    const data = response.json();
+    return data;
+  };
+
+  const {
+    mutateAsync: updateRestaurantRatingById,
+    isLoading,
+    isSuccess,
+    error,
+    data,
+  } = useMutation(getUpdateRestaurantRatingByIdRequest);
+
+  if (error) {
+    toast.error(error.toString());
+  }
+
+  if (isSuccess) {
+    toast.success("Comment edited successfully");
+  }
+
+  return { updateRestaurantRatingById, isLoading, error, data };
+};
+
+export const useDeleteRating = () => {
+  const deleteRatingRequest = async (ratingID: string) => {
+    const accessToken = localStorage.getItem("everybodyeats_token");
+
+    if(!isTokenValid()){
+      return;
+    }
+    const response = await fetch(
+      `${API_BASE_URL}/api/my/restaurant/deleteRating?ratingID=${ratingID}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to delete restaurant");
+    }
+
+    return response.json();
+  };
+
+  const {
+    mutateAsync: deleteRating,
+    isLoading,
+    isSuccess,
+    error,
+    reset,
+  } = useMutation(deleteRatingRequest);
+
+  if (isSuccess) {
+    toast.success("Rating Deleted Successfully!");
+  }
+
+  if (error) {
+    toast.error(error.toString());
+    reset();
+  }
+
+  return { deleteRating, isLoading };
 };

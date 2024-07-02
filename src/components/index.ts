@@ -13,7 +13,7 @@ import UpdateRating from "./UpdateRating";
 import CommentSection from "./CommentSection";
 import OrderSummary from "./OrderSummary";
 import RestaurantInfo from "./RestaurantInfo";
-
+import EditableComment from "./EditableComment";
 
 
 export {
@@ -32,5 +32,6 @@ export {
     CommentSection,
     OrderSummary,
     RestaurantInfo,
+    EditableComment
 }
 
