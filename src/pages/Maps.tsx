@@ -2,8 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import mapboxgl, { Map, Marker, GeolocateControl } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useParams } from "react-router-dom";
-import * as turf from "@turf/turf";
-import { Units } from "@turf/turf";
 import { Button } from "@/components/ui/button";
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_SECRET_KEY;
@@ -26,6 +24,9 @@ const Maps_v2 = () => {
   const { restaurant: restaurantPlaceName } = useParams<{
     restaurant: string;
   }>();
+
+  console.log(setDistance);
+  console.log(setPrice);
 
   useEffect(() => {
     const fetchRestaurantLocation = async () => {
@@ -123,7 +124,7 @@ const Maps_v2 = () => {
 
       initializeMap();
     }
-  }, [restaurantLocation]);
+  }, [map, restaurantLocation]);
 
   const handleSearch = async () => {
     try {
@@ -147,19 +148,17 @@ const Maps_v2 = () => {
     }
   };
 
-  const handleCalculateDistance = () => {
+  const handleCalculateDistance = async () => {
     if (restaurantLocation && searchResults) {
-      const from = turf.point([restaurantLocation.lng, restaurantLocation.lat]);
-      const to = turf.point([searchResults.lng, searchResults.lat]);
-      const options: { units: Units } = { units: "kilometers" };
-      let distance = turf.distance(from, to, options);
-      distance = parseFloat(distance.toFixed(2));
-      setDistance(distance);
+      const response = await fetch(
+        `https://api.distancematrix.ai/maps/api/distancematrix/json?origins=${restaurantLocation.lat},${restaurantLocation.lng}&destinations=${searchResults.lat},${searchResults.lng}&key=kK6IKRqx4r8zhNjeR4UbNUblXM99JQXbj9B5mwui8uBYzUOFSI5RSsKockR9G2cw`
+      );
+      console.log(await response.json());
 
-      const basePrice = 100;
-      const additionalPrice = 50;
-      const price = basePrice + Math.floor(distance / 5) * additionalPrice;
-      setPrice(price);
+      // const basePrice = 100;
+      // const additionalPrice = 50;
+      // const price = basePrice + Math.floor(distance / 5) * additionalPrice;
+      // setPrice(price);
     }
   };
 
@@ -181,7 +180,10 @@ const Maps_v2 = () => {
         </button>
       </div>
       <div ref={mapContainerRef} style={{ height: "400px", width: "800px" }} />
-      <Button className="bg-orange-500 text-white" onClick={handleCalculateDistance}>
+      <Button
+        className="bg-orange-500 text-white"
+        onClick={handleCalculateDistance}
+      >
         Calculate distance and Price
       </Button>
       <div>

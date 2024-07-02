@@ -54,7 +54,7 @@ const UserProfileForm = ({
 
   const openMap = () => {
     const url = `/maps/restaurant/${encodeURIComponent(restaurantName)}`;
-    window.open(url, "_blank");
+    window.open(url);
   };
 
   useEffect(() => {
