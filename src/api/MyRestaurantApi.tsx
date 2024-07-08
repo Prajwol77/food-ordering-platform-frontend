@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";
-import { CommentSectionType, Restaurant } from "@/types.ts";
+import { CommentSectionType, Order, Restaurant } from "@/types.ts";
 import isTokenValid from "@/lib/checkToken";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -90,17 +90,17 @@ export const useCreateMyRestaurant = () => {
     isLoading,
     isSuccess,
     error,
-  } = useMutation(createMyRestaurantRequest);
+  } = useMutation(createMyRestaurantRequest, {
+    onSuccess: () => {
+      toast.success("Restaurant Created!");
+    },
+    onError: (error: Error) => {
+      console.error("Create restaurant error", error);
+      toast.error(`Unable to create restaurant: ${error.message}`);
+    },
+  });
 
-  if (isSuccess) {
-    toast.success("Restaurant created!");
-  }
-
-  if (error) {
-    toast.error("Unable to update restaurant");
-  }
-
-  return { createRestaurant, isLoading };
+  return { createRestaurant, isLoading, isSuccess, error };
 };
 
 export const useUpdateMyRestaurant = () => {
@@ -128,16 +128,17 @@ export const useUpdateMyRestaurant = () => {
     isLoading,
     error,
     isSuccess,
-  } = useMutation(updateRestaurantRequest);
+  } = useMutation(updateRestaurantRequest, {
+    onSuccess: () => {
+      toast.success("Restaurant Updated!");
+    },
+    onError: (error: Error) => {
+      console.error("Update restaurant error:", error);
+      toast.error(`Unable to update restaurant: ${error.message}`);
+    },
+  });
 
-  if (isSuccess) {
-    toast.success("Restaurant Updated!");
-  }
-  if (error) {
-    toast.error("Unable to update restaurant!");
-  }
-
-  return { updateRestaurant, isLoading };
+  return { updateRestaurant, isLoading, isSuccess, error };
 };
 
 export const useGetMyAllRestaurant = (page: number) => {
@@ -422,7 +423,7 @@ export const useDeleteRating = () => {
   const deleteRatingRequest = async (ratingID: string) => {
     const accessToken = localStorage.getItem("everybodyeats_token");
 
-    if(!isTokenValid()){
+    if (!isTokenValid()) {
       return;
     }
     const response = await fetch(
@@ -461,4 +462,95 @@ export const useDeleteRating = () => {
   }
 
   return { deleteRating, isLoading };
+};
+
+export const useGetMyRestaurantOrders = () => {
+  const getMyRestaurantOrdersRequest = async (): Promise<Order[]> => {
+    const accessToken = localStorage.getItem("everybodyeats_token");
+
+    if (!accessToken) {
+      throw new Error("No access token found");
+    }
+
+    const response = await fetch(`${API_BASE_URL}/api/my/restaurant/order`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to fetch orders: ${response.status}`);
+    }
+
+    return response.json();
+  };
+
+  const {
+    data: orders,
+    isLoading,
+    error,
+  } = useQuery<Order[], Error>(
+    "fetchMyRestaurantOrders",
+    getMyRestaurantOrdersRequest,
+    {
+      onError: (error) => {
+        toast.error(error.toString());
+      },
+    }
+  );
+
+  return { orders, isLoading, error };
+};
+
+type UpdateOrderStatusRequest = {
+  orderId: string;
+  status: string;
+};
+
+export const useUpdateMyRestaurantOrder = () => {
+  const updateMyRestaurantOrder = async (
+    updateStatusOrderRequest: UpdateOrderStatusRequest
+  ) => {
+    const accessToken = localStorage.getItem("everybodyeats_token");
+
+    if (!accessToken) {
+      throw new Error("No access token found");
+    }
+
+    const response = await fetch(
+      `${API_BASE_URL}/api/my/restaurant/order/${updateStatusOrderRequest.orderId}/status`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: updateStatusOrderRequest.status }),
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`Failed to fetch orders`);
+    }
+
+    return response.json();
+  };
+
+  const {
+    mutateAsync: updateRestaurantStatus,
+    isLoading,
+    isError,
+    isSuccess,
+    reset,
+  } = useMutation(updateMyRestaurantOrder);
+
+  if (isSuccess) {
+    toast.success("Order Updated");
+  }
+  if (isError) {
+    toast.error("Unable to update order");
+    reset();
+  }
+
+  return { updateRestaurantStatus, isLoading };
 };

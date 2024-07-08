@@ -1,11 +1,49 @@
 import isTokenValid from "@/lib/checkToken";
 import { CartItem } from "@/pages/DetailPage";
-import { useMutation } from "react-query";
+import { Order } from "@/types";
+import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export const useGetMyOrders = () => {};
+export const useGetMyOrders = () => {
+  const getMyOrdersRequest = async (): Promise<Order[]> => {
+    const accessToken = localStorage.getItem("everybodyeats_token");
+
+    if (!isTokenValid()) {
+      throw new Error("Invalid token");
+    }
+
+    const response = await fetch(`${API_BASE_URL}/api/order/checkout`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user");
+    }
+    const data = await response.json();
+    console.log(data);
+    return data;
+  };
+
+  const {
+    data: orders,
+    isLoading,
+    error,
+  } = useQuery("fetchMyOrder", getMyOrdersRequest, {
+    refetchInterval: 5000,
+  });
+
+  if (error) {
+    toast.error(error.toString());
+  }
+
+  return { orders, isLoading };
+};
 
 export type CheckoutSessionRequest = {
   cartItems: CartItem[];

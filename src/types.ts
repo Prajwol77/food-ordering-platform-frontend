@@ -42,9 +42,11 @@ export type Order = {
   restaurant: Restaurant;
   user: User;
   cartItems: {
+    id: string;
+    _id: string;
     menuItemId: string;
     name: string;
-    quantity: string;
+    quantity: number;
   }[];
   deliveryDetails: {
     name: string;
