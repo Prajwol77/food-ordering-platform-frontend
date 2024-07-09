@@ -84,3 +84,9 @@ export type CommentSectionForUserType = {
   name: string;
   email: string;
 };
+
+export type AllRestaurantType = {
+  count: number;
+  data: Restaurant[]
+}
+

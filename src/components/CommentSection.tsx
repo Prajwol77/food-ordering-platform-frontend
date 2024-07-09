@@ -22,7 +22,6 @@ const CommentSection = ({
   const [allComments, setAllComments] = useState<CommentSectionType[]>([]);
 
   const { deleteRating, isLoading: deleteLoading } = useDeleteRating();
-  console.log(deleteLoading);
 
   const { data: comments, isLoading } = useGetAllCommentForRestaurant(
     restaurantID,

@@ -54,7 +54,7 @@ const UserProfileForm = ({
 
   const openMap = () => {
     const url = `/maps/restaurant/${encodeURIComponent(restaurantName)}`;
-    window.open(url);
+    window.location.href = url;
   };
 
   useEffect(() => {
@@ -157,9 +157,14 @@ const UserProfileForm = ({
           {isLoading ? (
             <LoadingButton />
           ) : (
-            <Button type="submit" className="bg-orange-500">
-              {buttonText}
-            </Button>
+            <>
+              <Button type="submit" className="bg-orange-500 mr-3">
+                {buttonText}
+              </Button>
+              <Button type="submit" className="bg-purple-500">
+                Pay with Khalti
+              </Button>
+            </>
           )}
           {restaurantName && (
             <Button type="button" onClick={openMap} className="bg-zinc-500 m-2">

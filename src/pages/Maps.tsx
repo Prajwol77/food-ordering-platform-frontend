@@ -11,22 +11,18 @@ interface Location {
   lng: number;
 }
 
-const Maps_v2 = () => {
+const Maps = () => {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<Map | null>(null);
   const markerRef = useRef<Marker | null>(null);
   const [restaurantLocation, setRestaurantLocation] = useState<Location>();
   const [query, setQuery] = useState<string>("");
   const [searchResults, setSearchResults] = useState<Location>();
-  const [distance, setDistance] = useState<number | null>(null);
-  const [price, setPrice] = useState(0);
+  const [isLoading, setIsLoading] = useState(false)
 
   const { restaurant: restaurantPlaceName } = useParams<{
     restaurant: string;
   }>();
-
-  console.log(setDistance);
-  console.log(setPrice);
 
   useEffect(() => {
     const fetchRestaurantLocation = async () => {
@@ -110,7 +106,7 @@ const Maps_v2 = () => {
         mapInstance.on("click", (event) => {
           const { lng, lat } = event.lngLat;
           setSearchResults({ lat, lng });
-
+          setIsLoading(true)
           if (markerRef.current) {
             markerRef.current.setLngLat([lng, lat]);
           } else {
@@ -139,6 +135,7 @@ const Maps_v2 = () => {
           lng: geometry.coordinates[0],
         };
         setSearchResults(coordinates);
+        setIsLoading(true);
         if (map) {
           map.flyTo({ center: [coordinates.lng, coordinates.lat], zoom: 14 });
         }
@@ -153,12 +150,16 @@ const Maps_v2 = () => {
       const response = await fetch(
         `https://api.distancematrix.ai/maps/api/distancematrix/json?origins=${restaurantLocation.lat},${restaurantLocation.lng}&destinations=${searchResults.lat},${searchResults.lng}&key=kK6IKRqx4r8zhNjeR4UbNUblXM99JQXbj9B5mwui8uBYzUOFSI5RSsKockR9G2cw`
       );
-      console.log(await response.json());
-
-      // const basePrice = 100;
-      // const additionalPrice = 50;
-      // const price = basePrice + Math.floor(distance / 5) * additionalPrice;
-      // setPrice(price);
+      const data = await response.json();
+      const distance = data.rows[0].elements[0].distance.text.split(' ')[0];
+      console.log('distance', distance);
+      debugger
+      const duration = data.rows[0].elements[0].duration.text.split(' ')[0];
+      const estimatedDeliveryTime = parseInt(duration) + 20;
+      sessionStorage.setItem('estimatedDeliveryTime', estimatedDeliveryTime.toString());
+      const deliveryPrice = (Math.ceil(distance / 5) * 50).toString();
+      sessionStorage.setItem('deliveryPrice', deliveryPrice);
+      window.history.back();
     }
   };
 
@@ -181,21 +182,14 @@ const Maps_v2 = () => {
       </div>
       <div ref={mapContainerRef} style={{ height: "400px", width: "800px" }} />
       <Button
+        disabled={!isLoading}
         className="bg-orange-500 text-white"
         onClick={handleCalculateDistance}
       >
-        Calculate distance and Price
+        Select Location
       </Button>
-      <div>
-        {searchResults &&
-          `Lat: ${searchResults?.lat}, Lng: ${searchResults?.lng}`}
-      </div>
-      {distance !== null && (
-        <div>Distance: {distance.toFixed(2)} kilometers</div>
-      )}
-      {price}
     </>
   );
 };
 
-export default Maps_v2;
+export default Maps;

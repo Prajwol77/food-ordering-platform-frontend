@@ -48,7 +48,7 @@ export const DetailsSection = () => {
         />
       </div>
 
-      <FormField
+      {/* <FormField
         control={control}
         name="deliveryPrice"
         render={({ field }) => (
@@ -60,8 +60,8 @@ export const DetailsSection = () => {
             <FormMessage />
           </FormItem>
         )}
-      />
-      <FormField
+      /> */}
+      {/* <FormField
         control={control}
         name="estimatedDeliveryTime"
         render={({ field }) => (
@@ -73,7 +73,7 @@ export const DetailsSection = () => {
             <FormMessage />
           </FormItem>
         )}
-      />
+      /> */}
     </div>
   );
 };

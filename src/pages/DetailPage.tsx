@@ -12,7 +12,8 @@ import { UserFormData } from "@/forms/user-profile-form/UserProfileForm.tsx";
 import { StarFilledIcon, StarIcon } from "@radix-ui/react-icons";
 import { CommentSection, UpdateRating } from "@/components";
 import { useGetMyUser } from "@/api/MyUserApi";
-import { CheckoutSessionRequest, useCheckOutSession } from "@/api/OrderApi";
+import { CheckoutSessionRequest, useCheckOutSession, useKhaltiCheckOutSession } from "@/api/OrderApi";
+import { toast } from "sonner";
 
 export type CartItem = {
   id: string;
@@ -27,6 +28,8 @@ const DetailPage = () => {
   const [totalStar, setTotalStar] = useState(0);
   const { currentUser, isLoading: isCurrentUserLoading } = useGetMyUser();
   const { checkoutSession, isLoading: isCheckoutSessionLoading } = useCheckOutSession();
+  const { khaltiCheckoutSession, isLoading: isKhaltiCheckoutSessionLoading } = useKhaltiCheckOutSession();
+  
 
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
@@ -75,30 +78,40 @@ const DetailPage = () => {
       const existingCartItem = prevCartItems.find(
         (item) => item.id === cartItem.id
       );
-
-      sessionStorage.setItem(
-        `cartItems-${restaurantId}`,
-        JSON.stringify(existingCartItem)
-      );
-
+  
       if (!existingCartItem) {
         return prevCartItems;
       }
-
+  
+      let updatedCartItems;
       if (existingCartItem.quantity === 1) {
-        return prevCartItems.filter((item) => item.id !== cartItem.id);
+        updatedCartItems = prevCartItems.filter((item) => item.id !== cartItem.id);
+      } else {
+        updatedCartItems = prevCartItems.map((item) =>
+          item.id === cartItem.id
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
+        );
       }
 
-      return prevCartItems.map((item) =>
-        item.id === cartItem.id
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
+      sessionStorage.setItem(
+        `cartItems-${restaurantId}`,
+        JSON.stringify(updatedCartItems)
       );
+  
+      return updatedCartItems;
     });
   };
 
   const onCheckout = (userFormData: UserFormData) => {
-    console.log("userFormData", userFormData);
+
+    const deliveryPrice = sessionStorage.getItem('deliveryPrice');
+    const estimatedDeliveryTime = sessionStorage.getItem('estimatedDeliveryTime');
+
+    if(!deliveryPrice || !estimatedDeliveryTime){
+      return toast.error('Please select location from map');
+    }
+
     const checkOutRequestData: CheckoutSessionRequest = {
       cartItems: cartItems,
       deliveryDetails: {
@@ -106,9 +119,18 @@ const DetailPage = () => {
         name: userFormData.name,
         address: userFormData.address,
         city: userFormData.city,
+        contact: userFormData.contact
       },
       restaurantId: restaurantId as string,
+      deliveryPrice: deliveryPrice || '',
+      estimatedDeliveryTime: estimatedDeliveryTime || ''
     };
+
+    // if(methodType !== 'Pay with card'){
+    //   khaltiCheckoutSession(checkOutRequestData);
+    //   return;
+    // }
+
     checkoutSession(checkOutRequestData);
   };
   
@@ -165,7 +187,7 @@ const DetailPage = () => {
             <CardFooter>
               <CheckoutButton
                 restaurantName={restaurant.city}
-                disabled={cartItems.length === 0 || isCheckoutSessionLoading}
+                disabled={cartItems.length === 0 || isCheckoutSessionLoading || isKhaltiCheckoutSessionLoading}
                 onCheckout={onCheckout}
               />
             </CardFooter>

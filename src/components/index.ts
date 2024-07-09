@@ -14,7 +14,7 @@ import CommentSection from "./CommentSection";
 import OrderSummary from "./OrderSummary";
 import RestaurantInfo from "./RestaurantInfo";
 import EditableComment from "./EditableComment";
-
+import RestaurantCard from "./RestaurantCard";
 
 export {
     Footer,
@@ -32,6 +32,7 @@ export {
     CommentSection,
     OrderSummary,
     RestaurantInfo,
-    EditableComment
+    EditableComment,
+    RestaurantCard    
 }
 
