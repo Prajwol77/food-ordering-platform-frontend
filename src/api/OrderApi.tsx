@@ -23,10 +23,9 @@ export const useGetMyOrders = () => {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to fetch user");
+      throw new Error("Failed to fetch my orders");
     }
     const data = await response.json();
-    console.log(data);
     return data;
   };
 

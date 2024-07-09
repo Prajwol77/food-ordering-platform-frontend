@@ -17,8 +17,8 @@ const OrderStatusDetail = ({ order }: Props) => {
       <div className="flex flex-col">
         <span className="font-bold">Your Order</span>
         <ul>
-          {order.cartItems.map((item) => (
-            <li>
+          {order.cartItems.map((item, index) => (
+            <li key={index}>
               {item.name} x {item.quantity}
             </li>
           ))}
@@ -27,7 +27,9 @@ const OrderStatusDetail = ({ order }: Props) => {
       <Separator />
       <div className="flex flex-col">
         <span className="font-bold">Total</span>
-        <span>रु {(order.totalAmount / 100).toFixed(2)}</span>
+        <span>
+          रु {(order.totalAmount / 100 + order.deliveryPrice).toFixed(2)}
+        </span>
       </div>
     </div>
   );

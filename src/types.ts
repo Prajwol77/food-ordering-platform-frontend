@@ -58,6 +58,7 @@ export type Order = {
   status: OrderStatus;
   createdAt: string;
   restaurantId: string;
+  deliveryPrice: number;
 };
 
 export type RestaurantSearchResponse = {
@@ -89,4 +90,11 @@ export type AllRestaurantType = {
   count: number;
   data: Restaurant[]
 }
+
+export type AllOrderType = {
+  count: number;
+  data: Order[]
+}
+
+
 
