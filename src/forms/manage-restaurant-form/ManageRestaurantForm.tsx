@@ -24,11 +24,11 @@ const formSchema = z
     deliveryPrice: z.coerce.number({
       required_error: "delivery price is required",
       invalid_type_error: "must be a valid number",
-    }),
+    }).optional(),
     estimatedDeliveryTime: z.coerce.number({
       required_error: "estimated delivery time is required",
       invalid_type_error: "must be a valid number",
-    }),
+    }).optional(),
     cuisines: z.array(z.string()).nonempty({
       message: "please select at least one item",
     }),
@@ -93,14 +93,17 @@ const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
     formData.append("restaurantName", formDataJson.restaurantName);
     formData.append("city", formDataJson.city);
 
-    formData.append(
-      "deliveryPrice",
-      (formDataJson.deliveryPrice * 100).toString()
-    );
-    formData.append(
-      "estimatedDeliveryTime",
-      formDataJson.estimatedDeliveryTime.toString()
-    );
+    if(formDataJson.deliveryPrice && formDataJson.estimatedDeliveryTime){
+      formData.append(
+        "deliveryPrice",
+        (formDataJson.deliveryPrice * 100).toString()
+      );
+      formData.append(
+        "estimatedDeliveryTime",
+        formDataJson.estimatedDeliveryTime.toString()
+      );
+    }
+
 
     formDataJson.cuisines.forEach((cuisine, index) => {
       formData.append(`cuisines[${index}]`, cuisine);

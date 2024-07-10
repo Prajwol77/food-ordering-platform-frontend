@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";
-import { CommentSectionType, Order, Restaurant } from "@/types.ts";
+import { AllOrderType, AllRestaurantType, CommentSectionType, Order, Restaurant } from "@/types.ts";
 import isTokenValid from "@/lib/checkToken";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -40,7 +40,7 @@ type UpdateRestaurantRatingByIdResponse = {
 };
 
 export const useGetMyRestaurant = () => {
-  const getMyRestaurantRequest = async (): Promise<MyRestaurantType> => {
+  const getMyRestaurantRequest = async (): Promise<MyRestaurantType | undefined> => {
     const accessToken = localStorage.getItem("everybodyeats_token");
 
     const response = await fetch(`${API_BASE_URL}/api/my/restaurant`, {
@@ -49,6 +49,10 @@ export const useGetMyRestaurant = () => {
         Authorization: `Bearer ${accessToken}`,
       },
     });
+
+    if(response.status == 404){
+      return undefined;
+    }
 
     if (!response.ok) {
       throw new Error("Failed to get restaurant");
@@ -366,6 +370,79 @@ export const useGetAllCommentForRestaurant = (
     },
   });
 };
+
+
+
+export const useGetAllRestaurants = (
+  page: number,
+) => {
+  const getAllRestaurant = async () => {
+    const response = await fetch(
+      `${API_BASE_URL}/api/my/restaurant/getRestaurant?page=${page}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to get all restaurant");
+    }
+    const res: AllRestaurantType = await response.json();
+    return res;
+  };
+
+  const {
+    data: allRestaurants,
+    isLoading,
+    error,
+  } = useQuery(
+    ["getAllRestaurant"],
+    getAllRestaurant
+  );
+
+  if (error) {
+    toast.error(error.toString());
+  }
+
+  return { allRestaurants, isLoading };
+};
+
+
+export const useGetAllOrderHistory = (
+  page: number,
+  userId: string
+) => {
+  const getAllOrderHistory = async () => {
+    const response = await fetch(
+      `${API_BASE_URL}/api/my/restaurant/getOrderHistory?page=${page}&userId=${userId}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to get all orders");
+    }
+    const res: AllOrderType = await response.json();
+    return res;
+  };
+
+  const {
+    data: allOrderDetails,
+    isLoading,
+    error,
+  } = useQuery(
+    ["getAllOrderHistory"],
+    getAllOrderHistory
+  );
+
+  if (error) {
+    toast.error(error.toString());
+  }
+
+  return { allOrderDetails, isLoading };
+};
+
 
 export const useUpdateRestaurantRatingById = () => {
   const getUpdateRestaurantRatingByIdRequest = async ({

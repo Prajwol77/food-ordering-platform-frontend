@@ -19,3 +19,19 @@ export default function isTokenValid(): boolean {
     return false;
   }
 }
+
+export const getUserId = () => {
+  const token = localStorage.getItem("everybodyeats_token");
+  if (token) {
+    try {
+      const decodedToken: { userId: string } = jwtDecode(token);
+      return decodedToken.userId;
+    } catch (error) {
+      console.log(error);
+      return '';
+    }
+  } else {
+    return '';
+  }
+
+}

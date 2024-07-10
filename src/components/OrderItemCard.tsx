@@ -4,12 +4,12 @@ import { Separator } from "./ui/separator";
 import { Badge } from "./ui/badge";
 import { Label } from "./ui/label";
 import {
+  Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@radix-ui/react-select";
-import { Select } from "./ui/select";
 import { ORDER_STATUS } from "@/config/order-status-config";
 import { useUpdateMyRestaurantOrder } from "@/api/MyRestaurantApi";
 import { useEffect, useState } from "react";
@@ -26,6 +26,7 @@ const OrderItemCard = ({ order }: Props) => {
   useEffect(() => {
     setStatus(order.status);
   }, [order.status]);
+
   const handleStatusChange = async (newStatus: OrderStatus) => {
     await updateRestaurantStatus({
       orderId: order._id as string,
@@ -44,6 +45,7 @@ const OrderItemCard = ({ order }: Props) => {
 
     return `${hours}:${paddedMinutes}`;
   };
+
   return (
     <Card>
       <CardHeader>
@@ -76,7 +78,7 @@ const OrderItemCard = ({ order }: Props) => {
       <CardContent className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           {order.cartItems.map((cartItem) => (
-            <span>
+            <span key={cartItem._id}>
               <Badge variant="outline" className="mr-2">
                 {cartItem.quantity}
               </Badge>
@@ -89,14 +91,20 @@ const OrderItemCard = ({ order }: Props) => {
           <Select
             value={status}
             disabled={isLoading}
-            onValueChange={(value) => handleStatusChange(value as OrderStatus)}
+            onValueChange={(value) => {
+              debugger
+              console.log("Selected Value:", value);
+              handleStatusChange(value as OrderStatus);
+            }}
           >
             <SelectTrigger id="status">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent position="popper">
-              {ORDER_STATUS.map((status) => (
-                <SelectItem value={status.value}>{status.label}</SelectItem>
+              {ORDER_STATUS.map((status, index) => (
+                <SelectItem key={index} value={status.value}>
+                  {status.label}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
