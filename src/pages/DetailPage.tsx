@@ -12,7 +12,11 @@ import { UserFormData } from "@/forms/user-profile-form/UserProfileForm.tsx";
 import { StarFilledIcon, StarIcon } from "@radix-ui/react-icons";
 import { CommentSection, UpdateRating } from "@/components";
 import { useGetMyUser } from "@/api/MyUserApi";
-import { CheckoutSessionRequest, useCheckOutSession, useKhaltiCheckOutSession } from "@/api/OrderApi";
+import {
+  CheckoutSessionRequest,
+  useCheckOutSession,
+  useKhaltiCheckOutSession,
+} from "@/api/OrderApi";
 import { toast } from "sonner";
 
 export type CartItem = {
@@ -27,9 +31,10 @@ const DetailPage = () => {
   const { restaurant, isLoading } = useGetRestaurant(restaurantId);
   const [totalStar, setTotalStar] = useState(0);
   const { currentUser, isLoading: isCurrentUserLoading } = useGetMyUser();
-  const { checkoutSession, isLoading: isCheckoutSessionLoading } = useCheckOutSession();
-  const { khaltiCheckoutSession, isLoading: isKhaltiCheckoutSessionLoading } = useKhaltiCheckOutSession();
-  
+  const { checkoutSession, isLoading: isCheckoutSessionLoading } =
+    useCheckOutSession();
+  const { khaltiCheckoutSession, isLoading: isKhaltiCheckoutSessionLoading } =
+    useKhaltiCheckOutSession();
 
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
@@ -78,14 +83,16 @@ const DetailPage = () => {
       const existingCartItem = prevCartItems.find(
         (item) => item.id === cartItem.id
       );
-  
+
       if (!existingCartItem) {
         return prevCartItems;
       }
-  
+
       let updatedCartItems;
       if (existingCartItem.quantity === 1) {
-        updatedCartItems = prevCartItems.filter((item) => item.id !== cartItem.id);
+        updatedCartItems = prevCartItems.filter(
+          (item) => item.id !== cartItem.id
+        );
       } else {
         updatedCartItems = prevCartItems.map((item) =>
           item.id === cartItem.id
@@ -98,18 +105,19 @@ const DetailPage = () => {
         `cartItems-${restaurantId}`,
         JSON.stringify(updatedCartItems)
       );
-  
+
       return updatedCartItems;
     });
   };
 
-  const onCheckout = (userFormData: UserFormData) => {
+  const onCheckout = (userFormData: UserFormData, methodType = "a") => {
+    const deliveryPrice = sessionStorage.getItem("deliveryPrice");
+    const estimatedDeliveryTime = sessionStorage.getItem(
+      "estimatedDeliveryTime"
+    );
 
-    const deliveryPrice = sessionStorage.getItem('deliveryPrice');
-    const estimatedDeliveryTime = sessionStorage.getItem('estimatedDeliveryTime');
-
-    if(!deliveryPrice || !estimatedDeliveryTime){
-      return toast.error('Please select location from map');
+    if (!deliveryPrice || !estimatedDeliveryTime) {
+      return toast.error("Please select location from map");
     }
 
     const checkOutRequestData: CheckoutSessionRequest = {
@@ -119,21 +127,20 @@ const DetailPage = () => {
         name: userFormData.name,
         address: userFormData.address,
         city: userFormData.city,
-        contact: userFormData.contact
+        contact: userFormData.contact,
       },
       restaurantId: restaurantId as string,
-      deliveryPrice: deliveryPrice || '',
-      estimatedDeliveryTime: estimatedDeliveryTime || ''
+      deliveryPrice: deliveryPrice || "",
+      estimatedDeliveryTime: estimatedDeliveryTime || "",
     };
 
-    // if(methodType !== 'Pay with card'){
-    //   khaltiCheckoutSession(checkOutRequestData);
-    //   return;
-    // }
+    if (methodType !== "Pay with card") {
+      khaltiCheckoutSession(checkOutRequestData);
+      return;
+    }
 
     checkoutSession(checkOutRequestData);
   };
-  
 
   useEffect(() => {
     if (restaurant) {
@@ -187,7 +194,11 @@ const DetailPage = () => {
             <CardFooter>
               <CheckoutButton
                 restaurantName={restaurant.city}
-                disabled={cartItems.length === 0 || isCheckoutSessionLoading || isKhaltiCheckoutSessionLoading}
+                disabled={
+                  cartItems.length === 0 ||
+                  isCheckoutSessionLoading ||
+                  isKhaltiCheckoutSessionLoading
+                }
                 onCheckout={onCheckout}
               />
             </CardFooter>
@@ -198,7 +209,10 @@ const DetailPage = () => {
             userId={currentUser?._id}
           />
         </div>
-        <CommentSection restaurantID={restaurant._id} userID={currentUser?._id}/>
+        <CommentSection
+          restaurantID={restaurant._id}
+          userID={currentUser?._id}
+        />
       </div>
     </div>
   );

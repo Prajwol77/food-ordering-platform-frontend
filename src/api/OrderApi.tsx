@@ -100,7 +100,6 @@ export const useCheckOutSession = () => {
   return { checkoutSession, isLoading };
 };
 
-
 export const useKhaltiCheckOutSession = () => {
   const getMyKhaltiCheckoutSessionRequest = async (
     checkoutSessionRequest: CheckoutSessionRequest
