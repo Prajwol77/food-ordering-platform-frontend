@@ -110,7 +110,7 @@ const DetailPage = () => {
     });
   };
 
-  const onCheckout = (userFormData: UserFormData, methodType = "a") => {
+  const onCheckout = (userFormData: UserFormData) => {
     const deliveryPrice = sessionStorage.getItem("deliveryPrice");
     const estimatedDeliveryTime = sessionStorage.getItem(
       "estimatedDeliveryTime"
