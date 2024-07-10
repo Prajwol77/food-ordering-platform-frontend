@@ -124,6 +124,8 @@ export const useKhaltiCheckOutSession = () => {
       throw new Error("Failed to create stripe session");
     }
     const data = await response.json();
+    console.log("data", data);
+    
     window.open(data.payment_url);
     // window.open(data.url, "_blank");
     return data;

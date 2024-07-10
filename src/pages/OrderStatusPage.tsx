@@ -1,14 +1,11 @@
-import { useGetAllOrderHistory } from "@/api/MyRestaurantApi";
 import { useGetMyOrders } from "@/api/OrderApi";
 import OrderStatusDetail from "@/components/OrderStatusDetail";
 import OrderStatusHeader from "@/components/OrderStatusHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getUserId } from "@/lib/checkToken";
 import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 
 const OrderStatusPage = () => {
   const { orders, isLoading } = useGetMyOrders();
-  const { allOrderDetails } = useGetAllOrderHistory(1, getUserId());
 
   if (isLoading) {
     return "Loading...";
@@ -24,6 +21,8 @@ const OrderStatusPage = () => {
     sessionStorage.removeItem("deliveryPrice");
   }
 
+  const reversedOrders = [...orders].reverse();
+
   return (
     <>
       <Tabs defaultValue="orders">
@@ -36,7 +35,7 @@ const OrderStatusPage = () => {
           value="orders"
         >
           <div className="space-y-10">
-            {orders.map((orders, index) => (
+            {reversedOrders.map((orders, index) => (
               <div
                 className="space-y-10 bg-gray-50 p-10 rounded-lg"
                 key={index}
@@ -58,7 +57,7 @@ const OrderStatusPage = () => {
 
         <TabsContent value="manage-restaurant">
         <div className="space-y-10">
-            {allOrderDetails && allOrderDetails?.data.map((orders, index) => (
+            {reversedOrders.map((orders, index) => (
               <div
                 className="space-y-10 bg-gray-50 p-10 rounded-lg"
                 key={index}
