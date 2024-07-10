@@ -59,6 +59,7 @@ export type Order = {
   createdAt: string;
   restaurantId: string;
   deliveryPrice: number;
+  estimatedDeliveryTime: number;
 };
 
 export type RestaurantSearchResponse = {

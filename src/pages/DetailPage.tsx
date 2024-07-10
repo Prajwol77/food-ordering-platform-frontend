@@ -126,10 +126,11 @@ const DetailPage = () => {
       estimatedDeliveryTime: estimatedDeliveryTime || ''
     };
 
-    // if(methodType !== 'Pay with card'){
-    //   khaltiCheckoutSession(checkOutRequestData);
-    //   return;
-    // }
+    const t = true;
+
+    if(t){
+      return khaltiCheckoutSession(checkOutRequestData)
+    }
 
     checkoutSession(checkOutRequestData);
   };
