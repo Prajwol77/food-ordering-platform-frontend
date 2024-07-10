@@ -6,6 +6,11 @@ type Props = {
 };
 
 const OrderStatusDetail = ({ order }: Props) => {
+<<<<<<< HEAD
+  console.log(order);
+
+=======
+>>>>>>> 8c6e523ba418ce617356cd20a8bca6284a6a9b73
   return (
     <div className="space-y-5">
       <div className="flex flex-col ">
