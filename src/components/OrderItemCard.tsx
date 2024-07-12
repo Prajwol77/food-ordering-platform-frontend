@@ -35,6 +35,7 @@ const OrderItemCard = ({ order }: Props) => {
   //   });
   //   setStatus(newStatus);
   // };
+  debugger;
 
   const getTime = () => {
     const orderDateTime = new Date(order.createdAt);
@@ -50,19 +51,31 @@ const OrderItemCard = ({ order }: Props) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="grid md:grid-cols-4 gap-4 justify-between mb-3">
+        <CardTitle className="grid md:grid-cols-2 gap-4 justify-between mb-3">
           <div>
             Customer Name:
             <span className="ml-2 font-normal">
               {order.deliveryDetails.name}
             </span>
           </div>
-          <div>
-            Delivery Address:
-            <span className="ml-2 font-normal">
-              {order.deliveryDetails.address}, {order.deliveryDetails.city}
-            </span>
+          <div className="flex gap-5">
+            <div>
+              <span>Delivery Address:</span>
+              <span className="ml-2 font-normal">
+                {order.deliveryDetails.address.split("-landmark-")[0]},{" "}
+                {order.deliveryDetails.city}
+              </span>
+            </div>
+            {order.deliveryDetails.address.split("-landmark-")[1] && (
+              <div className="flex">
+                Landmark:
+                <span className="ml-2 font-normal">
+                  {order.deliveryDetails.address.split("-landmark-")[1]}
+                </span>
+              </div>
+            )}
           </div>
+
           <div>
             Time:
             <span className="ml-2 font-normal">{getTime()}</span>
