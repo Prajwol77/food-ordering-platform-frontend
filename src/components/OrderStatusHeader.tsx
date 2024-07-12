@@ -4,29 +4,33 @@ import { ORDER_STATUS } from "@/config/order-status-config";
 
 type Props = {
   order: Order;
+  isHistory?: boolean;
 };
 
-const OrderStatusHeader = ({ order }: Props) => {
-  const getExpectedDelivery = () => {
-    const created = new Date(order.createdAt);
-    console.log('Order created at (UTC):', created);
+const OrderStatusHeader = ({ order, isHistory = false }: Props) => {
+  // const getExpectedDelivery = () => {
+  //   const created = new Date(order.createdAt);
+  //   console.log("Order created at (UTC):", created);
 
-    // Add the estimated delivery time in minutes to the created time
-    created.setMinutes(created.getMinutes() + order.estimatedDeliveryTime);
-    console.log('Expected delivery time (UTC):', created);
+  //   // Add the estimated delivery time in minutes to the created time
+  //   created.setMinutes(created.getMinutes() + order.estimatedDeliveryTime);
+  //   console.log("Expected delivery time (UTC):", created);
 
-    // Convert to local time (Nepal Time in this case)
-    const localTimeOptions: Intl.DateTimeFormatOptions = {
-      timeZone: 'Asia/Kathmandu',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: false,
-    };
-    const localCreated = new Intl.DateTimeFormat('en-US', localTimeOptions).format(created);
-    console.log('Expected delivery time (Nepal Time):', localCreated);
+  //   // Convert to local time (Nepal Time in this case)
+  //   const localTimeOptions: Intl.DateTimeFormatOptions = {
+  //     timeZone: "Asia/Kathmandu",
+  //     hour: "numeric",
+  //     minute: "numeric",
+  //     hour12: false,
+  //   };
+  //   const localCreated = new Intl.DateTimeFormat(
+  //     "en-US",
+  //     localTimeOptions
+  //   ).format(created);
+  //   console.log("Expected delivery time (Nepal Time):", localCreated);
 
-    return localCreated;
-  };
+  //   return localCreated;
+  // };
 
   const getOrderStatusInfo = () => {
     return (
@@ -37,14 +41,15 @@ const OrderStatusHeader = ({ order }: Props) => {
   const isCanceled = () => {
     const created = new Date(order.createdAt);
     const now = new Date();
-    console.log('Current time (local):', now);
+    console.log("Current time (local):", now);
 
-    const timeDifference = (now.getTime() - created.getTime()) / (1000 * 60 * 60);
-    console.log('Time difference in hours:', timeDifference);
+    const timeDifference =
+      (now.getTime() - created.getTime()) / (1000 * 60 * 60);
+    console.log("Time difference in hours:", timeDifference);
 
     const orderStatusInfo = getOrderStatusInfo();
     const label = orderStatusInfo.label;
-    if (label !== 'Delivered' && timeDifference >= 12) {
+    if (label !== "Delivered" && timeDifference >= 12) {
       return true;
     }
 
@@ -58,7 +63,12 @@ const OrderStatusHeader = ({ order }: Props) => {
           Order Status:{" "}
           {isCanceled() ? "Cancelled" : getOrderStatusInfo().label}
         </span>
-        <span>Expected by: {getExpectedDelivery()}</span>
+        {!isCanceled() && (
+          <span>
+            {isHistory ? "Delivered at" : "Expected at"}:{" "}
+            {order.estimatedDeliveryTime} minutes
+          </span>
+        )}
       </h1>
       <Progress
         className="animate-pulse"

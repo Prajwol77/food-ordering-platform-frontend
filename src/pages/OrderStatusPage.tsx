@@ -21,7 +21,12 @@ const OrderStatusPage = () => {
     sessionStorage.removeItem("deliveryPrice");
   }
 
-  const reversedOrders = [...orders].reverse();
+  const reversedOrders = [...orders]
+    .reverse()
+    .filter((o) => o.status !== "delivered");
+  const filterOrders = [...orders]
+    .reverse()
+    .filter((o) => o.status == "delivered");
 
   return (
     <>
@@ -31,9 +36,7 @@ const OrderStatusPage = () => {
           <TabsTrigger value="manage-restaurant">History</TabsTrigger>
         </TabsList>
 
-        <TabsContent
-          value="orders"
-        >
+        <TabsContent value="orders">
           <div className="space-y-10">
             {reversedOrders.map((orders, index) => (
               <div
@@ -56,13 +59,13 @@ const OrderStatusPage = () => {
         </TabsContent>
 
         <TabsContent value="manage-restaurant">
-        <div className="space-y-10">
-            {reversedOrders.map((orders, index) => (
+          <div className="space-y-10">
+            {filterOrders.map((orders, index) => (
               <div
                 className="space-y-10 bg-gray-50 p-10 rounded-lg"
                 key={index}
               >
-                <OrderStatusHeader order={orders} />
+                <OrderStatusHeader order={orders} isHistory={true} />
                 <div className="grid gap-10 md:grid-cols-2">
                   <OrderStatusDetail order={orders} />
                   <AspectRatio ratio={16 / 5}>

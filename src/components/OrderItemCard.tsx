@@ -1,18 +1,19 @@
-import { Order, OrderStatus } from "@/types";
+import { Order } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Separator } from "./ui/separator";
 import { Badge } from "./ui/badge";
 import { Label } from "./ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@radix-ui/react-select";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@radix-ui/react-select";
 import { ORDER_STATUS } from "@/config/order-status-config";
 import { useUpdateMyRestaurantOrder } from "@/api/MyRestaurantApi";
-import { useEffect, useState } from "react";
+
+import { Button } from "./ui/button";
 
 type Props = {
   order: Order;
@@ -21,19 +22,19 @@ type Props = {
 const OrderItemCard = ({ order }: Props) => {
   const { updateRestaurantStatus, isLoading } = useUpdateMyRestaurantOrder();
 
-  const [status, setStatus] = useState<OrderStatus>(order.status);
+  // const [status, setStatus] = useState<OrderStatus>(order.status);
 
-  useEffect(() => {
-    setStatus(order.status);
-  }, [order.status]);
+  // useEffect(() => {
+  //   setStatus(order.status);
+  // }, [order.status]);
 
-  const handleStatusChange = async (newStatus: OrderStatus) => {
-    await updateRestaurantStatus({
-      orderId: order._id as string,
-      status: newStatus,
-    });
-    setStatus(newStatus);
-  };
+  // const handleStatusChange = async (newStatus: OrderStatus) => {
+  //   await updateRestaurantStatus({
+  //     orderId: order._id as string,
+  //     status: newStatus,
+  //   });
+  //   setStatus(newStatus);
+  // };
 
   const getTime = () => {
     const orderDateTime = new Date(order.createdAt);
@@ -88,11 +89,29 @@ const OrderItemCard = ({ order }: Props) => {
         </div>
         <div className="flex flex-col space-y-1.5">
           <Label htmlFor="status">What is the status of this order?</Label>
-          <Select
+          <div className="flex">
+            {ORDER_STATUS.map((o, index) => (
+              <Button
+                disabled={isLoading}
+                onClick={() =>
+                  updateRestaurantStatus({
+                    orderId: order._id,
+                    status: o.value,
+                  })
+                }
+                className=" ml-2 font-normal bg-orange-400"
+                key={index}
+              >
+                {o.label}
+              </Button>
+            ))}
+          </div>
+
+          {/* <Select
             value={status}
             disabled={isLoading}
             onValueChange={(value) => {
-              debugger
+              
               console.log("Selected Value:", value);
               handleStatusChange(value as OrderStatus);
             }}
@@ -107,7 +126,7 @@ const OrderItemCard = ({ order }: Props) => {
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </Select> */}
         </div>
       </CardContent>
     </Card>

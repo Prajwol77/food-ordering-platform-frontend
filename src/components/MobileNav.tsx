@@ -14,16 +14,16 @@ import { useGetMyUser } from "@/api/MyUserApi";
 import isTokenValid from "@/lib/checkToken";
 
 const MobileNav = () => {
-  const { currentUser, isLoading } = useGetMyUser()
+  const { currentUser, isLoading } = useGetMyUser();
   const navigate = useNavigate();
   let isAuthenticated = false;
   const token = isTokenValid();
-  if(token){
-    isAuthenticated = true
+  if (token) {
+    isAuthenticated = true;
   }
 
-  if(isLoading){
-    return <p>Loading...</p>
+  if (isLoading) {
+    return <p>Loading...</p>;
   }
 
   return (
@@ -47,7 +47,12 @@ const MobileNav = () => {
           {isAuthenticated ? (
             <MobileNavLinks />
           ) : (
-            <Button onClick={() => navigate('/login')} className="flex-1 font-bold bg-orange-500">Log In</Button>            
+            <Button
+              onClick={() => navigate("/login")}
+              className="flex-1 font-bold bg-orange-500"
+            >
+              Log In
+            </Button>
           )}
         </SheetDescription>
       </SheetContent>

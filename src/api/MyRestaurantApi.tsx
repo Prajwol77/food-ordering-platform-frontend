@@ -1,6 +1,12 @@
 import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";
-import { AllOrderType, AllRestaurantType, CommentSectionType, Order, Restaurant } from "@/types.ts";
+import {
+  AllOrderType,
+  AllRestaurantType,
+  CommentSectionType,
+  Order,
+  Restaurant,
+} from "@/types.ts";
 import isTokenValid from "@/lib/checkToken";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -40,7 +46,9 @@ type UpdateRestaurantRatingByIdResponse = {
 };
 
 export const useGetMyRestaurant = () => {
-  const getMyRestaurantRequest = async (): Promise<MyRestaurantType | undefined> => {
+  const getMyRestaurantRequest = async (): Promise<
+    MyRestaurantType | undefined
+  > => {
     const accessToken = localStorage.getItem("everybodyeats_token");
 
     const response = await fetch(`${API_BASE_URL}/api/my/restaurant`, {
@@ -50,7 +58,7 @@ export const useGetMyRestaurant = () => {
       },
     });
 
-    if(response.status == 404){
+    if (response.status == 404) {
       return undefined;
     }
 
@@ -113,6 +121,10 @@ export const useUpdateMyRestaurant = () => {
   ): Promise<Restaurant> => {
     const accessToken = localStorage.getItem("everybodyeats_token");
 
+    if (!accessToken) {
+      throw new Error("No access token found");
+    }
+
     const response = await fetch(`${API_BASE_URL}/api/my/restaurant`, {
       method: "PUT",
       headers: {
@@ -121,12 +133,16 @@ export const useUpdateMyRestaurant = () => {
       body: restaurantFormData,
     });
 
-    if (!response) {
-      throw new Error("Failed to update restaurant");
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Failed to update restaurant: ${response.status} ${response.statusText}\n${errorText}`
+      );
     }
 
     return response.json();
   };
+
   const {
     mutate: updateRestaurant,
     isLoading,
@@ -155,7 +171,6 @@ export const useGetMyAllRestaurant = (page: number) => {
         method: "GET",
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
         },
       }
     );
@@ -371,11 +386,7 @@ export const useGetAllCommentForRestaurant = (
   });
 };
 
-
-
-export const useGetAllRestaurants = (
-  page: number,
-) => {
+export const useGetAllRestaurants = (page: number) => {
   const getAllRestaurant = async () => {
     const response = await fetch(
       `${API_BASE_URL}/api/my/restaurant/getRestaurant?page=${page}`,
@@ -395,10 +406,7 @@ export const useGetAllRestaurants = (
     data: allRestaurants,
     isLoading,
     error,
-  } = useQuery(
-    ["getAllRestaurant"],
-    getAllRestaurant
-  );
+  } = useQuery(["getAllRestaurant"], getAllRestaurant);
 
   if (error) {
     toast.error(error.toString());
@@ -407,11 +415,7 @@ export const useGetAllRestaurants = (
   return { allRestaurants, isLoading };
 };
 
-
-export const useGetAllOrderHistory = (
-  page: number,
-  userId: string
-) => {
+export const useGetAllOrderHistory = (page: number, userId: string) => {
   const getAllOrderHistory = async () => {
     const response = await fetch(
       `${API_BASE_URL}/api/my/restaurant/getOrderHistory?page=${page}&userId=${userId}`,
@@ -431,10 +435,7 @@ export const useGetAllOrderHistory = (
     data: allOrderDetails,
     isLoading,
     error,
-  } = useQuery(
-    ["getAllOrderHistory"],
-    getAllOrderHistory
-  );
+  } = useQuery(["getAllOrderHistory"], getAllOrderHistory);
 
   if (error) {
     toast.error(error.toString());
@@ -442,7 +443,6 @@ export const useGetAllOrderHistory = (
 
   return { allOrderDetails, isLoading };
 };
-
 
 export const useUpdateRestaurantRatingById = () => {
   const getUpdateRestaurantRatingByIdRequest = async ({
