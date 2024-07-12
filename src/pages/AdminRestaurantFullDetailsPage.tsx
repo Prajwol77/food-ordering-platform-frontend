@@ -2,7 +2,6 @@ import {
   useDeleteMyRestaurant,
   useGetRestaurantByID,
 } from "@/api/MyRestaurantApi";
-import { Graph } from "@/components";
 import { Button } from "@/components/ui/button";
 import { MenuItem } from "@/types";
 import { useNavigate, useParams } from "react-router-dom";
@@ -94,7 +93,7 @@ const AdminRestaurantFullDetailsPage = () => {
           </div>
         </div>
       </div>
-      <Graph/>
+      
     </>
   );
 };

@@ -7,7 +7,6 @@ import MobileNav from "./MobileNav";
 import MobileNavLinks from "./MobileNavLinks";
 import UsernameMenu from "./UsernameMenu";
 import AdminNav from "./AdminNav";
-import Graph from "./Graph";
 import PieChart from "./PieChart";
 import UpdateRating from "./UpdateRating";
 import CommentSection from "./CommentSection";
@@ -17,22 +16,20 @@ import EditableComment from "./EditableComment";
 import RestaurantCard from "./RestaurantCard";
 
 export {
-    Footer,
-    Header,
-    Hero,
-    LoadingButton,
-    MainNav,
-    MobileNav,
-    MobileNavLinks,
-    UsernameMenu,
-    AdminNav,
-    Graph,
-    PieChart,
-    UpdateRating,
-    CommentSection,
-    OrderSummary,
-    RestaurantInfo,
-    EditableComment,
-    RestaurantCard    
-}
-
+  Footer,
+  Header,
+  Hero,
+  LoadingButton,
+  MainNav,
+  MobileNav,
+  MobileNavLinks,
+  UsernameMenu,
+  AdminNav,
+  PieChart,
+  UpdateRating,
+  CommentSection,
+  OrderSummary,
+  RestaurantInfo,
+  EditableComment,
+  RestaurantCard,
+};

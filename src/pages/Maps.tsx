@@ -3,6 +3,7 @@ import mapboxgl, { Map, Marker, GeolocateControl } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_SECRET_KEY;
 
@@ -210,7 +211,12 @@ const Maps = () => {
             placeholder="Add landmark"
             onChange={(e) => setAddMark(e.target.value)}
           />
-          <Button onClick={() => sessionStorage.setItem('landmark', addMark)}>
+          <Button
+            onClick={() => {
+              sessionStorage.setItem("landmark", addMark);
+              toast.success("Landmark added ✅");
+            }}
+          >
             Add Landmark
           </Button>
         </div>

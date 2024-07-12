@@ -161,12 +161,12 @@ const UserProfileForm = ({
               <Button type="submit" className="bg-orange-500 mr-3">
                 {buttonText}
               </Button>
-              <Button type="submit" className="bg-purple-500">
+              <Button type="submit" className="bg-purple-500 mr-3">
                 Pay with Khalti
               </Button>
 
-              <Button type="submit" className="bg-purple-500">
-               Cash on Delivery 💵
+              <Button type="submit" className="bg-green-400 ">
+                Cash on Delivery 💵
               </Button>
             </>
           )}
