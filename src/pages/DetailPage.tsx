@@ -136,16 +136,15 @@ const DetailPage = () => {
       deliveryPrice: deliveryPrice || "",
       estimatedDeliveryTime: estimatedDeliveryTime || "",
     };
+    const paymentMethod = localStorage.getItem("paymentMethod");
 
-    const t = false;
 
-    if (t) {
+    if (paymentMethod === "khalti") {
       return khaltiCheckoutSession(checkOutRequestData);
     }
-    else{
+    else if(paymentMethod === "cod"){
       return cashOnDeliveryCheckoutSession(checkOutRequestData)
     }
-
     checkoutSession(checkOutRequestData);
   };
 

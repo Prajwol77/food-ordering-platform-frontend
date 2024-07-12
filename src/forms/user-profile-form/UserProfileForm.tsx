@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input.tsx";
 import LoadingButton from "@/components/LoadingButton.tsx";
 import { Button } from "@/components/ui/button";
 import { User } from "@/types.ts";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const formSchema = z.object({
   email: z.string().optional(),
@@ -60,6 +60,35 @@ const UserProfileForm = ({
   useEffect(() => {
     form.reset(currentUser);
   }, [currentUser, form]);
+
+  const [hideButton, setHideButton] = useState(false);
+  useEffect(() => {
+    const url = window.location.href;
+    if (!url.includes("/user-profile")) {
+      setHideButton(true);
+    }
+  }, []);
+
+  useEffect(() => {
+   const stripeBtn = document.getElementById("stripe");
+   const khaltiBtn = document.getElementById("khalti");
+   const codBtn = document.getElementById("cod");
+   
+   stripeBtn?.addEventListener("click", ()=>{
+    localStorage.setItem("paymentMethod", "stripe") 
+   })
+
+   khaltiBtn?.addEventListener("click", ()=>{
+    localStorage.setItem("paymentMethod", "khalti")
+   })
+
+   codBtn?.addEventListener("click", ()=>{
+    localStorage.setItem("paymentMethod", "cod")
+   })
+
+  
+  }, [])
+  
 
   return (
     <>
@@ -158,16 +187,20 @@ const UserProfileForm = ({
             <LoadingButton />
           ) : (
             <>
-              <Button type="submit" className="bg-orange-500 mr-3">
+              <Button id="stripe" type="submit" className="bg-orange-500 mr-3">
                 {buttonText}
               </Button>
-              <Button type="submit" className="bg-purple-500 mr-3">
-                Pay with Khalti
-              </Button>
+              {hideButton && (
+                <>
+                  <Button id="khalti" type="submit" className="bg-purple-500 mr-3">
+                    Pay with Khalti
+                  </Button>
 
-              <Button type="submit" className="bg-green-400 ">
-                Cash on Delivery 💵
-              </Button>
+                  <Button id="cod" type="submit" className="bg-green-400 ">
+                    Cash on Delivery 💵
+                  </Button>
+                </>
+              )}
             </>
           )}
           {restaurantName && (
