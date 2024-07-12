@@ -108,6 +108,12 @@ export const useKhaltiCheckOutSession = () => {
     if (!isTokenValid()) {
       return;
     }
+
+    const landmark = sessionStorage.getItem('landmark');
+    if(landmark){
+      checkoutSessionRequest.deliveryDetails.address = `${checkoutSessionRequest.deliveryDetails.address}-landmark-${landmark}`
+    }
+
     const response = await fetch(
       `${API_BASE_URL}/api/order/checkout/create-khalti-checkout-session`,
       {

@@ -41,11 +41,9 @@ const OrderStatusHeader = ({ order, isHistory = false }: Props) => {
   const isCanceled = () => {
     const created = new Date(order.createdAt);
     const now = new Date();
-    console.log("Current time (local):", now);
 
     const timeDifference =
       (now.getTime() - created.getTime()) / (1000 * 60 * 60);
-    console.log("Time difference in hours:", timeDifference);
 
     const orderStatusInfo = getOrderStatusInfo();
     const label = orderStatusInfo.label;

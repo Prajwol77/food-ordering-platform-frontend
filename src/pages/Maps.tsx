@@ -24,6 +24,8 @@ const Maps = () => {
     restaurant: string;
   }>();
 
+  const [addMark, setAddMark] = useState<string>("");
+
   useEffect(() => {
     const fetchRestaurantLocation = async () => {
       try {
@@ -196,7 +198,23 @@ const Maps = () => {
           Search
         </button>
       </div>
-      <div ref={mapContainerRef} style={{ height: "400px", width: "800px" }} />
+      <div className="flex gap-5">
+        <div
+          ref={mapContainerRef}
+          style={{ height: "400px", width: "800px" }}
+        />
+        <div className="flex flex-col gap-3">
+          <input
+            type="text"
+            className="border p-2 text-black focus:outline-none rounded w-full"
+            placeholder="Add landmark"
+            onChange={(e) => setAddMark(e.target.value)}
+          />
+          <Button onClick={() => sessionStorage.setItem('landmark', addMark)}>
+            Add Landmark
+          </Button>
+        </div>
+      </div>
       <Button
         disabled={!isLoading}
         className="bg-orange-500 text-white"

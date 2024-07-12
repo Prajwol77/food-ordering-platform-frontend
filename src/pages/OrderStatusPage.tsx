@@ -19,6 +19,7 @@ const OrderStatusPage = () => {
   if (url.includes("success")) {
     sessionStorage.removeItem("estimatedDeliveryTime");
     sessionStorage.removeItem("deliveryPrice");
+    sessionStorage.removeItem('landmark');
   }
 
   const reversedOrders = [...orders]
