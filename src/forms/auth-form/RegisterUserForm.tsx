@@ -13,6 +13,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { RegisterUserType } from "@/api/AuthApi";
+import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string(),
@@ -24,14 +27,16 @@ export type LoginUserFormData = z.infer<typeof formSchema>;
 
 const RegisterUserForm = ({
   onSave,
-  loading
+  loading,
 }: {
   onSave: (registerData: RegisterUserType) => void;
-  loading?: boolean
+  loading?: boolean;
 }) => {
   const form = useForm<LoginUserFormData>({
     resolver: zodResolver(formSchema),
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   return (
     <>
       <Form {...form}>
@@ -84,12 +89,25 @@ const RegisterUserForm = ({
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        className="bg-white border-gray-300 rounded-md"
-                        placeholder="Password"
-                        type="password"
-                      />
+                      <div className="relative">
+                        <Input
+                          {...field}
+                          className="bg-white border-gray-300 rounded-md pr-10"
+                          placeholder="Password"
+                          type={showPassword ? "text" : "password"}
+                        />
+                        <button
+                          type="button"
+                          className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword ? (
+                            <EyeOff className="h-5 w-5 text-gray-400" />
+                          ) : (
+                            <Eye className="h-5 w-5 text-gray-400" />
+                          )}
+                        </button>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -107,7 +125,7 @@ const RegisterUserForm = ({
             <div className="flex items-center justify-center mt-4 text-sm text-gray-700">
               <span>Already have an account?</span>
               <button
-                onClick={() => (window.location.href = "/login")}
+                onClick={() => navigate("/login")}
                 className="text-orange-500 hover:text-orange-600 font-medium ml-1"
                 disabled={loading}
               >
