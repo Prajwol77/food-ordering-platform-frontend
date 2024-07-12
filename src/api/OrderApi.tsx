@@ -125,7 +125,7 @@ export const useKhaltiCheckOutSession = () => {
     }
     const data = await response.json();
     console.log("data", data);
-    
+
     window.open(data.payment_url);
     // window.open(data.url, "_blank");
     return data;
@@ -142,4 +142,49 @@ export const useKhaltiCheckOutSession = () => {
   }
 
   return { khaltiCheckoutSession, isLoading };
+};
+
+export const useCashOnDeliveryCheckoutSession = () => {
+  const getMyCashOnDeliveryCheckoutSessionRequest = async (
+    checkoutSessionRequest: CheckoutSessionRequest
+  ) => {
+    const accessToken = localStorage.getItem("everybodyeats_token");
+
+    if (!isTokenValid()) {
+      return;
+    }
+    const response = await fetch(
+      `${API_BASE_URL}/api/order/checkout/cashOnDelivery`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(checkoutSessionRequest),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to create stripe session");
+    }
+    const data = await response.json();
+    console.log("data", data);
+
+    window.open("/order-status?success=true");
+    // window.open(data.url, "_blank");
+    return data;
+  };
+
+  const {
+    mutate: cashOnDeliveryCheckoutSession,
+    isLoading,
+    error,
+  } = useMutation(getMyCashOnDeliveryCheckoutSessionRequest);
+
+  if (error) {
+    toast.error(error.toString());
+  }
+
+  return { cashOnDeliveryCheckoutSession, isLoading };
 };

@@ -164,6 +164,10 @@ const UserProfileForm = ({
               <Button type="submit" className="bg-purple-500">
                 Pay with Khalti
               </Button>
+
+              <Button type="submit" className="bg-purple-500">
+               Cash on Delivery 💵
+              </Button>
             </>
           )}
           {restaurantName && (

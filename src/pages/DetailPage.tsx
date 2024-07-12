@@ -14,6 +14,7 @@ import { CommentSection, UpdateRating } from "@/components";
 import { useGetMyUser } from "@/api/MyUserApi";
 import {
   CheckoutSessionRequest,
+  useCashOnDeliveryCheckoutSession,
   useCheckOutSession,
   useKhaltiCheckOutSession,
 } from "@/api/OrderApi";
@@ -35,6 +36,8 @@ const DetailPage = () => {
     useCheckOutSession();
   const { khaltiCheckoutSession, isLoading: isKhaltiCheckoutSessionLoading } =
     useKhaltiCheckOutSession();
+
+    const {cashOnDeliveryCheckoutSession} = useCashOnDeliveryCheckoutSession();
 
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
@@ -134,10 +137,13 @@ const DetailPage = () => {
       estimatedDeliveryTime: estimatedDeliveryTime || "",
     };
 
-    const t = true;
+    const t = false;
 
     if (t) {
       return khaltiCheckoutSession(checkOutRequestData);
+    }
+    else{
+      return cashOnDeliveryCheckoutSession(checkOutRequestData)
     }
 
     checkoutSession(checkOutRequestData);
